@@ -1,11 +1,21 @@
 package pieces;
 
-abstract class Piece {
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+
+public abstract class Piece implements MouseListener{
+	
 	private int value;
 	private String name;
 	private char nameChar;
 	private int rank;
 	private int column;
+	private String set_type;
+	
+	private JButton pieceSprite;
+	//private Board parent;
+	
 	
 	/**
 	 * 
@@ -50,4 +60,8 @@ abstract class Piece {
 	 * 
 	 */
 	public abstract void seeable();
+	
+	public JButton getPieceSprite() {
+		return pieceSprite;
+	}
 }
