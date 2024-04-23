@@ -3,6 +3,7 @@ package pieces;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class Bishop extends Piece {
 
@@ -16,10 +17,9 @@ public class Bishop extends Piece {
 		this.rank = rank;
 		this.column = column;
 
-		pieceSprite = new ImageIcon(
-				getClass().getResource(
-						"/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png")))
-				.getImage();
+		pieceSprite = new JButton(new ImageIcon(
+				getClass().getResource("/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png"))));
+		pieceSprite.addMouseListener(this);
 	}
 
 	@Override

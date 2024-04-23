@@ -18,7 +18,7 @@ public abstract class Piece implements MouseListener{
 	protected String setType;
 	protected boolean isWhite;
 	
-	protected Image pieceSprite;
+	protected JButton pieceSprite;
 	
 	
 	protected Board parent;
@@ -68,7 +68,7 @@ public abstract class Piece implements MouseListener{
 	 */
 	protected abstract void seeable();
 	
-	public Image getPieceSprite() {
+	public JButton getPieceSprite() {
 		return pieceSprite;
 	}
 }

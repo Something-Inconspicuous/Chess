@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class King extends Piece {
 
@@ -11,16 +12,15 @@ public class King extends Piece {
 		name = "King";
 		nameChar = 'K';
 		value = 0;
-	
+
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
 		this.column = column;
 
-		pieceSprite = new ImageIcon(
-				getClass().getResource(
-						"/images/" + st + "-king-" + ((isW) ? "white.png" : "black.png")))
-				.getImage();
+		pieceSprite = new JButton(new ImageIcon(
+				getClass().getResource("/images/" + st + "-king-" + ((isW) ? "white.png" : "black.png"))));
+		pieceSprite.addMouseListener(this);
 	}
 
 	@Override
