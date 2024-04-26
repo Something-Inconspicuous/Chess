@@ -19,7 +19,7 @@ public class Board {
 			board[i * 7][4] = new King("club", i != 0, i * 7, 4);
 			board[i * 7][5] = new Bishop("club", i != 0, i * 7, 5);
 			board[i * 7][6] = new Knight("used", i != 0, i * 7, 6);
-			board[i * 7][7] = new Rook("club", i != 0, i * 7, 0);
+			board[i * 7][7] = new Rook("club", i != 0, i * 7, 7);
 		}
 
 		for (int j = 0; j < 8; j++) {

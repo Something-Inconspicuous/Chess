@@ -22,6 +22,7 @@ public class BoardGUI extends JPanel {
 
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9, 9));
+		boardPanel.setBackground(Color.red);
 		Piece[][] boardArr = board.getBoard();
 
 		// add letter coordinates outside of the board (a-h)
@@ -74,6 +75,7 @@ public class BoardGUI extends JPanel {
 		temp.setFocusable(false);
 		temp.setPreferredSize(new Dimension(80, 80));
 		temp.setBackground(color);
+		//temp.setOpaque(false);
 
 		return temp;
 	}

@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import chess.*;
 
 public abstract class Piece implements MouseListener {
@@ -23,6 +25,8 @@ public abstract class Piece implements MouseListener {
 
 	protected Board parent;
 	protected Point prevPoint;
+	
+	protected JPanel parentSquare;
 
 	/**
 	 * 

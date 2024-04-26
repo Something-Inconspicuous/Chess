@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * https://coderanch.com/t/629524/java/set-opacity-JLabel-JLabel-Image
  */
 public class Runner {
-	private static JFrame frame;
+	public static JFrame frame;
 	private static final Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public static TitlePane titlePane;
@@ -61,7 +61,7 @@ public class Runner {
 
 		Graphics2D g2 = resizedImage.createGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+		//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 		g2.drawImage(img, 0, 0, w, h, null);
 		g2.dispose();
 		return resizedImage;
