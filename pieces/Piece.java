@@ -64,13 +64,14 @@ public abstract class Piece implements MouseListener {
 	protected abstract void move(int r, int c);
 
 	/**
-	 * 
+	 * Allow the player to view the possible locations this piece can move to
 	 */
 	protected abstract void seeable();
 
 	public int getColor() {
 		return (isWhite) ? 0 : 1;
 	}
+	
 
 	public JButton getPieceSprite() {
 		return pieceSprite;
