@@ -1,26 +1,29 @@
 package pieces;
 
+import java.awt.Image;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import chess.*;
 
-public abstract class Piece implements MouseListener {
-
+public abstract class Piece implements MouseListener{
+	
 	protected int value;
 	protected String name;
 	protected char nameChar;
-
+	
 	protected int rank;
 	protected int column;
-
+	
 	protected String setType;
 	protected boolean isWhite;
-
-	protected JButton pieceSprite;
-
+	
+	protected Image pieceSprite;
+	
+	
 	protected Board parent;
-
+	
+	
 	/**
 	 * 
 	 * @return the value of the piece
@@ -28,7 +31,7 @@ public abstract class Piece implements MouseListener {
 	public int getValue() {
 		return value;
 	}
-
+	
 	/**
 	 * 
 	 * @return the name of the piece
@@ -36,7 +39,7 @@ public abstract class Piece implements MouseListener {
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
 	 * 
 	 * @return the character that represents the piece
@@ -44,28 +47,32 @@ public abstract class Piece implements MouseListener {
 	public char getNameChar() {
 		return nameChar;
 	}
-
+	
 	/**
 	 * 
-	 * @return the position of the piece by {column, rank}
+	 * @return the position of the piece by {rank, column}
 	 */
 	public int[] getPosition() {
-		return new int[] { column, rank };
+		return new int[] {rank, column};
 	}
-
+	
 	/**
 	 * 
 	 * @param r
 	 * @param c
 	 */
 	protected abstract void move(int r, int c);
-
+	
 	/**
 	 * 
 	 */
 	protected abstract void seeable();
-
-	public JButton getPieceSprite() {
+	
+	public int getColor() {
+		return (isWhite) ? 1 : 0;
+	}
+	
+	public Image getPieceSprite() {
 		return pieceSprite;
 	}
 }
