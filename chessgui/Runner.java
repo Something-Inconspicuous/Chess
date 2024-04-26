@@ -2,6 +2,9 @@
 package chessgui;
 
 import javax.swing.*;
+
+import chess.Board;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -16,11 +19,13 @@ public class Runner {
 	private static final Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public static TitlePane titlePane;
-	public static BoardGUI board;
+	public static BoardGUI boardGUI;
+	public static Board board;
 
 	static {
 		titlePane = new TitlePane();
-		board = new BoardGUI();
+		board = new Board();
+		boardGUI = new BoardGUI();
 	}
 
 	public Runner() {
@@ -51,11 +56,12 @@ public class Runner {
 	 * @param w     - the width of the scaled image
 	 * @param h     - the height of the scaled image
 	 */
-	public static Image getScaledImage(Image img, int w, int h) {
+	public static Image getScaledImage(Image img, int w, int h, float opacity) {
 		BufferedImage resizedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2 = resizedImage.createGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 		g2.drawImage(img, 0, 0, w, h, null);
 		g2.dispose();
 		return resizedImage;

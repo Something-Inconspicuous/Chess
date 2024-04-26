@@ -34,7 +34,7 @@ public class TitlePane extends JPanel {
 		startButton = getFormattedButton("start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Runner.setScreen(Runner.board);
+				Runner.setScreen(Runner.boardGUI);
 			}
 		});
 		

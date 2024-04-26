@@ -24,7 +24,7 @@ public class Knight extends Piece {
 		pieceSprite = new JButton(new ImageIcon(Runner.getScaledImage(
 				new ImageIcon(getClass().getResource("/images/" + st + "-knight-" + ((isW) ? "white.png" : "black.png")))
 						.getImage(),
-				80, 80)));
+				80, 80, 1)));
 
 		pieceSprite.setBackground(Color.BLACK);
 		pieceSprite.setFocusable(false);
@@ -47,14 +47,12 @@ public class Knight extends Piece {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		System.out.println(name + " at " + prevPoint + " on layer " + pieceSprite.getComponentZOrder(pieceSprite));
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		prevPoint = pieceSprite.getParent().getLocation();
 	}
 
 	@Override

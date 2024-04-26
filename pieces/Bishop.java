@@ -21,17 +21,19 @@ public class Bishop extends Piece {
 		this.rank = rank;
 		this.column = column;
 
-		pieceSprite = new JButton(new ImageIcon(Runner.getScaledImage(
-				new ImageIcon(getClass().getResource("/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png")))
-						.getImage(),
-				80, 80)));
+		pieceSprite = new JButton(
+				new ImageIcon(
+						Runner.getScaledImage(
+								new ImageIcon(getClass().getResource(
+										"/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png"))).getImage(),
+								80, 80, 1)));
 
 		pieceSprite.setBackground(Color.BLACK);
 		pieceSprite.setFocusable(false);
 		pieceSprite.setBorderPainted(false);
 		pieceSprite.setOpaque(false);
 		pieceSprite.setPreferredSize(new Dimension(80, 80));
-		
+
 		pieceSprite.addMouseListener(this);
 	}
 
@@ -47,14 +49,12 @@ public class Bishop extends Piece {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		System.out.println(name + " at " + prevPoint + " on layer " + pieceSprite.getComponentZOrder(pieceSprite));
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		prevPoint = pieceSprite.getParent().getLocation();
 	}
 
 	@Override

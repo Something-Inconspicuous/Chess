@@ -2,8 +2,11 @@ package pieces;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
+import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -21,18 +24,32 @@ public class Pawn extends Piece {
 		this.rank = rank;
 		this.column = column;
 
-		pieceSprite = new JButton(new ImageIcon(Runner.getScaledImage(
+		img = new ImageIcon(Runner.getScaledImage(
 				new ImageIcon(getClass().getResource("/images/" + st + "-pawn-" + ((isW) ? "white.png" : "black.png")))
 						.getImage(),
-				80, 80)));
+				80, 80, 1));
 
+		pieceSprite = new JButton(img);
 		pieceSprite.setBackground(Color.BLACK);
 		pieceSprite.setFocusable(false);
 		pieceSprite.setBorderPainted(false);
 		pieceSprite.setOpaque(false);
 		pieceSprite.setPreferredSize(new Dimension(80, 80));
-		
+
 		pieceSprite.addMouseListener(this);
+		pieceSprite.addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+
+			}
+
+		});
 	}
 
 	@Override
@@ -47,25 +64,30 @@ public class Pawn extends Piece {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		prevPoint = pieceSprite.getParent().getLocation();
+		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 0.6f)));
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 
+		Point p = new Point((int) prevPoint.getX() + e.getX(), (int) prevPoint.getY() + e.getY());
+		((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p)).add(pieceSprite);
+
+		Runner.boardGUI.revalidate();
+		Runner.boardGUI.repaint();
+
+		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 

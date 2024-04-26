@@ -14,12 +14,10 @@ import javax.swing.border.EmptyBorder;
 public class BoardGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel boardPanel;
+	private Board board;
 
 	public BoardGUI() {
-		this(new Board());
-	}
-
-	public BoardGUI(Board board) {
+		board = Runner.board;
 		setBackground(Color.WHITE);
 
 		boardPanel = new JPanel();
@@ -60,6 +58,16 @@ public class BoardGUI extends JPanel {
 
 		add(boardPanel);
 	}
+	
+	
+	public JPanel getBoardPanel() {
+		return boardPanel;
+	}
+	
+	public Board getBoard() {
+		return board;
+	}
+	
 
 	private JPanel createSquare(String pos, Color color) {
 		GridSpace temp = new GridSpace(pos);
