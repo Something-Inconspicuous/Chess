@@ -140,4 +140,20 @@ public class Evaluator{
 			}
 			return value;
 		}
+	// Accessors
+	public int infty() {
+		return INFINITY;
+	}
+
+	public int mate() {
+		return MATE;
+	}
+	
+	public int stalemate() {
+	  return STALEMATE;
+	}
+
+	public int weightOfPawn() {
+		return pawnval;
+	}
 }
