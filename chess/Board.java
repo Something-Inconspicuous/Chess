@@ -12,22 +12,22 @@ public class Board {
 
 	public Board() {
 		for (int i = 0; i < 2; i++) {
-			board[i * 7][0] = new Rook("club", i != 0, i * 7, 0);
-			board[i * 7][1] = new Knight("club", i != 0, i * 7, 1);
-			board[i * 7][2] = new Bishop("club", i != 0, i * 7, 2);
-			board[i * 7][3] = new Queen("club", i != 0, i * 7, 3);
-			board[i * 7][4] = new King("club", i != 0, i * 7, 4);
-			board[i * 7][5] = new Bishop("club", i != 0, i * 7, 5);
-			board[i * 7][6] = new Knight("used", i != 0, i * 7, 6);
-			board[i * 7][7] = new Rook("club", i != 0, i * 7, 7);
+			board[i * 7][0] = new Rook("lichess", i != 0, i * 7, 0);
+			board[i * 7][1] = new Knight("lichess", i != 0, i * 7, 1);
+			board[i * 7][2] = new Bishop("lichess", i != 0, i * 7, 2);
+			board[i * 7][3] = new Queen("lichess", i != 0, i * 7, 3);
+			board[i * 7][4] = new King("lichess", i != 0, i * 7, 4);
+			board[i * 7][5] = new Bishop("lichess", i != 0, i * 7, 5);
+			board[i * 7][6] = new Knight("lichess", i != 0, i * 7, 6);
+			board[i * 7][7] = new Rook("lichess", i != 0, i * 7, 7);
 		}
 
 		for (int j = 0; j < 8; j++) {
-			board[1][j] = new Pawn("club", false, 1, j);
+			board[1][j] = new Pawn("lichess", false, 1, j);
 		}
 
 		for (int j = 0; j < 8; j++) {
-			board[6][j] = new Pawn("club", true, 6, j);
+			board[6][j] = new Pawn("lichess", true, 6, j);
 		}
 
 	}

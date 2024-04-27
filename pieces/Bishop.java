@@ -2,8 +2,13 @@ package pieces;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.border.MatteBorder;
 import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -15,17 +20,17 @@ public class Bishop extends Piece {
 
 	public Bishop(String st, boolean isW, int rank, int column) {
 		name = "Bishop";
-		nameChar = 'B'; 
+		nameChar = 'B';
 		value = 3;
 
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
 		this.column = column;
-
-		img = new ImageIcon(Runner.getScaledImage(
-				new ImageIcon(getClass().getResource("/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png")))
-						.getImage(),
+		
+		this.validPanels = new HashSet<JPanel>();
+		img = new ImageIcon(Runner.getScaledImage(new ImageIcon(
+				getClass().getResource("/images/" + st + "-bishop-" + ((isW) ? "white.png" : "black.png"))).getImage(),
 				80, 80, 1));
 
 		pieceSprite = new JButton(img);
@@ -56,6 +61,37 @@ public class Bishop extends Piece {
 		});
 	}
 
+	protected void revalidateMoves() {
+		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
+		LinkedList<JPanel> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		validPanels.clear();
+		
+		
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				for(int row = rank + (2*j-1), col = column + (2*i-1); row >= 0 && row < 8 && col >= 0 && col < 8; row += (2*j-1), col += (2*i-1)) {
+					
+					if(board[row][col] != null) {
+						if(board[row][col].getColor() == 1) {
+							tempList.add(tempMap.get((char)(65 + col)+ "" + (8-row)));
+						}
+						
+						break;
+					}
+					
+					tempList.add(tempMap.get((char)(65 + col)+ "" + (8-row)));
+					System.out.println((char)(65 + col) + " " + (8-row) + " " + i + " " + j);
+					
+				}
+			}
+		}
+
+
+		validPanels.addAll(tempList);
+
+	}
+
 	@Override
 	protected void move(int r, int c) {
 
@@ -73,9 +109,12 @@ public class Bishop extends Piece {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
+		Runner.boardGUI.clearBoard();
 		parentSquare = (JPanel) pieceSprite.getParent();
-
+		
+		originalBorder = parentSquare.getBorder();
+		
+		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(93, 121, 145) : new Color(209, 209, 209));
 		prevPoint = parentSquare.getLocation();
@@ -86,6 +125,12 @@ public class Bishop extends Piece {
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 
+		revalidateMoves();
+		for (JPanel pane : validPanels) {
+			System.out.println("bro what" + pane);
+
+			pane.setBackground(Color.red);
+		}
 	}
 
 	@Override
@@ -96,21 +141,31 @@ public class Bishop extends Piece {
 		// it will no longer be at that piece square since its on the layered panel
 		// ((JPanel)
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
+		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
 		System.out.println(e.getX() + " " + e.getY());
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
-
-		((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p)).add(pieceSprite);
+		
+		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
+		boolean valid = validPanels.contains(toSquare);
+		if(valid) {
+			toSquare.add(pieceSprite);
+			Runner.boardGUI.clearBoard();
+		}else {
+			parentSquare.add(pieceSprite);
+			
+		}
 
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
-
+		
+		
 		// update the board to match the GUI
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (!(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
 
@@ -120,6 +175,9 @@ public class Bishop extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
+		
+		parentSquare.setBorder(originalBorder);
+		
 	}
 
 	@Override

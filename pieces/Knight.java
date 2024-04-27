@@ -2,8 +2,17 @@ package pieces;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+
+import chess.Board;
+
 import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -15,17 +24,18 @@ public class Knight extends Piece {
 
 	public Knight(String st, boolean isW, int rank, int column) {
 		name = "Knight";
-		nameChar = 'N'; 
+		nameChar = 'N';
 		value = 3;
 
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
 		this.column = column;
+		
+		this.validPanels = new HashSet<JPanel>();
 
-		img = new ImageIcon(Runner.getScaledImage(
-				new ImageIcon(getClass().getResource("/images/" + st + "-knight-" + ((isW) ? "white.png" : "black.png")))
-						.getImage(),
+		img = new ImageIcon(Runner.getScaledImage(new ImageIcon(
+				getClass().getResource("/images/" + st + "-knight-" + ((isW) ? "white.png" : "black.png"))).getImage(),
 				80, 80, 1));
 
 		pieceSprite = new JButton(img);
@@ -56,6 +66,54 @@ public class Knight extends Piece {
 		});
 	}
 
+	protected void revalidateMoves() {
+		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
+		validPanels.clear();
+		LinkedList<JPanel> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		
+		System.out.println(column + " " + rank);
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				System.out.println((char)(65 + column + 2*(2*i-1))+ "" + (8-rank + (2*j - 1)));
+				if(!tempMap.containsKey((char)(65 + column + 2*(2*i-1))+ "" + (8- (rank + (2*j - 1))))) {
+					continue;
+				}
+				
+				System.out.println(i + " " +  j);
+				
+				
+				
+				if(board[rank + (2*j - 1)][column + 2*(2*i-1)] == null || board[rank + (2*j - 1)][column + 2*(2*i-1)].getColor() == 1) {
+					tempList.add(tempMap.get((char)(65 + column + 2*(2*i-1))+ "" + (8 - (rank + (2*j - 1)))));
+				}
+				
+				
+				System.out.println((char)(65 + column + 2*(2*i-1))+ " " + (8-rank + (2*j - 1)));
+			}
+		
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if(!tempMap.containsKey((char)(65 + column + (2*j - 1))+ "" + (8- (rank + 2*(2*i-1))))) {
+					continue;
+				}
+				
+				if(board[rank + 2*(2*i-1)][column + (2*j - 1)] == null || board[rank + 2*(2*i-1)][column + (2*j - 1)].getColor() == 1) {
+					tempList.add(tempMap.getOrDefault((char)(65 + column + (2*j - 1))+ "" + (8- (rank + 2*(2*i-1))), new JPanel()));
+				}
+				
+				System.out.println((char)(65 + column + (2*j - 1))+ " " + (8-rank + 2*(2*i-1)));
+			}
+		}
+		
+		validPanels.addAll(tempList);
+		tempList.clear();
+		
+	}
+
 	@Override
 	protected void move(int r, int c) {
 
@@ -73,9 +131,15 @@ public class Knight extends Piece {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
+		Runner.boardGUI.clearBoard();
+		
+		
 		parentSquare = (JPanel) pieceSprite.getParent();
-
+		
+		originalBorder = parentSquare.getBorder();
+		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
+		
+		
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(93, 121, 145) : new Color(209, 209, 209));
 		prevPoint = parentSquare.getLocation();
@@ -85,11 +149,21 @@ public class Knight extends Piece {
 
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
+		
+		revalidateMoves();
+		for(JPanel pane : validPanels) {
+			System.out.println("bro what" + pane);
+			
+			pane.setBackground(Color.red);
+		}
+		
+		
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		
 		// remove pieceSprite from boardGUI, then add it again at the location of the
 		// cursor
 
@@ -102,15 +176,25 @@ public class Knight extends Piece {
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
-		((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p)).add(pieceSprite);
+		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
+		boolean valid = validPanels.contains(toSquare);
+		if(valid) {
+			toSquare.add(pieceSprite);
+			Runner.boardGUI.clearBoard();
+		}else {
+			parentSquare.add(pieceSprite);
+			
+		}
 
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
-
+		
+	
+		
 		// update the board to match the GUI
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (!(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
 
@@ -120,6 +204,8 @@ public class Knight extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
+		
+		parentSquare.setBorder(originalBorder);
 	}
 
 	@Override

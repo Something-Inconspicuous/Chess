@@ -2,9 +2,12 @@ package pieces;
 
 import java.awt.Point;
 import java.awt.event.MouseListener;
+import java.util.HashSet;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import chess.*;
 
@@ -27,7 +30,13 @@ public abstract class Piece implements MouseListener {
 	protected Point prevPoint;
 	
 	protected JPanel parentSquare;
-
+	protected Border originalBorder;
+	
+	protected abstract void revalidateMoves();
+	protected HashSet<JPanel> validPanels;
+	
+	
+	
 	/**
 	 * 
 	 * @return the value of the piece

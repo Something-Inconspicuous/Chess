@@ -7,6 +7,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.util.HashMap;
 
 /**
  * tan color: new Color(250, 230, 175). Green color: new Color(145, 210, 100).
@@ -15,6 +16,9 @@ public class BoardGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel boardPanel;
 	private Board board;
+	private HashMap<String, JPanel> posToSquareMap;
+	private JButton removeAllDots; 
+	
 
 	public BoardGUI() {
 		board = Runner.board;
@@ -22,7 +26,11 @@ public class BoardGUI extends JPanel {
 
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9, 9));
-		boardPanel.setBackground(Color.red);
+	
+		
+		removeAllDots = new JButton();
+		
+		posToSquareMap = new HashMap<String, JPanel>();
 		Piece[][] boardArr = board.getBoard();
 
 		// add letter coordinates outside of the board (a-h)
@@ -34,6 +42,7 @@ public class BoardGUI extends JPanel {
 
 			boardPanel.add(temp);
 		}
+		
 		boardPanel.add(new JLabel());
 
 		// add each chess square
@@ -45,6 +54,8 @@ public class BoardGUI extends JPanel {
 					tempPanel.add(boardArr[i - 1][j - 1].getPieceSprite());
 				tempPanel.setBorder(new EmptyBorder(-5, 0, 0, 0));
 				boardPanel.add(tempPanel);
+				
+				removeAllDots.addActionListener((GridSpace)tempPanel);
 			}
 
 			// adds the number coordinates on the side of the board (1-8)
@@ -55,7 +66,7 @@ public class BoardGUI extends JPanel {
 			boardPanel.add(coordNumberLabel);
 		}
 
-		boardPanel.setBackground(Color.RED);
+		boardPanel.setBackground(Color.GRAY);
 
 		add(boardPanel);
 	}
@@ -69,28 +80,43 @@ public class BoardGUI extends JPanel {
 		return board;
 	}
 	
+	public void clearBoard() {
+		 removeAllDots.doClick();
+	}
 
 	private JPanel createSquare(String pos, Color color) {
-		GridSpace temp = new GridSpace(pos);
+		GridSpace temp = new GridSpace(pos, color);
 		temp.setFocusable(false);
 		temp.setPreferredSize(new Dimension(80, 80));
 		temp.setBackground(color);
-		//temp.setOpaque(false);
-
+		System.out.println(pos);
+		posToSquareMap.put(pos, temp);
 		return temp;
+	}
+	
+	public HashMap<String, JPanel> getPositionMap() {
+		return posToSquareMap;
 	}
 
 //	exists so that the square can hold the value of a position
-	private class GridSpace extends JPanel {
+	private class GridSpace extends JPanel implements ActionListener{
 		private static final long serialVersionUID = 1L;
 		private String position;
+		private Color color;
 
-		public GridSpace(String pos) {
+		public GridSpace(String pos, Color col) {
 			position = pos;
+			color = col;
 		}
 
 		public String getPosition() {
 			return position;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			setBackground(color);
 		}
 	}
 }
