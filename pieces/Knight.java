@@ -151,10 +151,22 @@ public class Knight extends Piece {
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 		
 		revalidateMoves();
-		for(JPanel pane : validPanels) {
+		
+		for (JPanel pane : validPanels) {
 			System.out.println("bro what" + pane);
+			JButton temp = new JButton(Runner.moveCircle);
+			if(pane.getComponentCount() != 0) {
+				temp = new JButton(Runner.captureCircle);
+			}
 			
-			pane.setBackground(Color.red);
+			temp.setBackground(Color.BLACK);
+			temp.setFocusable(false);
+			temp.setFocusPainted(false);
+			temp.setBorderPainted(false);
+			temp.setOpaque(false);
+			temp.setContentAreaFilled(false);
+			pane.add(temp, 0);                                        
+		
 		}
 		
 		

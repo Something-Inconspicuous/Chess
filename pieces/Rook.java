@@ -70,7 +70,7 @@ public class Rook extends Piece {
 		validPanels.clear();
 		
 		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i < Math.abs(r*8-column); i++) {
+			for (int i = 1; i <= Math.abs(r*7-column); i++) {
 				
 				if (board[rank][(2*r-1)*i + column] != null) {
 					if(board[rank][(2*r-1)*i + column].getColor() == 1) {
@@ -86,7 +86,7 @@ public class Rook extends Piece {
 		}
 		
 		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i < Math.abs(r*8-rank); i++) {
+			for (int i = 1; i <= Math.abs(r*7-rank); i++) {
 				if (board[rank + (2*r-1)*i][column] != null) {
 					if (board[rank + (2*r-1)*i][column].getColor() == 1) {
 						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8- (rank + (2*r-1)*i)), new JPanel()));
@@ -138,10 +138,22 @@ public class Rook extends Piece {
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 		
 		revalidateMoves();
-		for(JPanel pane : validPanels) {
+		
+		for (JPanel pane : validPanels) {
 			System.out.println("bro what" + pane);
+			JButton temp = new JButton(Runner.moveCircle);
+			if(pane.getComponentCount() != 0) {
+				temp = new JButton(Runner.captureCircle);
+			}
 			
-			pane.setBackground(Color.red);
+			temp.setBackground(Color.BLACK);
+			temp.setFocusable(false);
+			temp.setFocusPainted(false);
+			temp.setBorderPainted(false);
+			temp.setOpaque(false);
+			temp.setContentAreaFilled(false);
+			pane.add(temp, 0);                                        
+		
 		}
 	}
 

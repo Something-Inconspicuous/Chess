@@ -21,11 +21,15 @@ public class Runner {
 	public static TitlePane titlePane;
 	public static BoardGUI boardGUI;
 	public static Board board;
-
+	
+	public static ImageIcon moveCircle;
+	public static ImageIcon captureCircle;
+	
 	static {
 		titlePane = new TitlePane();
 		board = new Board();
 		boardGUI = new BoardGUI();
+		
 	}
 
 	public Runner() {
@@ -34,7 +38,17 @@ public class Runner {
 		frame.setPreferredSize(screensize);
 		frame.pack();
 		frame.setVisible(true);
-
+		
+		moveCircle = new ImageIcon(getScaledImage(
+				new ImageIcon(getClass().getResource("/images/move-circle.png"))
+				.getImage(),
+		80, 80, 0.5f));
+		
+		captureCircle = new ImageIcon(getScaledImage(
+				new ImageIcon(getClass().getResource("/images/capture-circle.png"))
+				.getImage(),
+		80, 80, 0.5f));
+		
 		setScreen(titlePane);
 	}
 
@@ -61,7 +75,7 @@ public class Runner {
 
 		Graphics2D g2 = resizedImage.createGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 		g2.drawImage(img, 0, 0, w, h, null);
 		g2.dispose();
 		return resizedImage;

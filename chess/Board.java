@@ -23,7 +23,7 @@ public class Board {
 		}
 
 		for (int j = 0; j < 8; j++) {
-			board[1][j] = new Pawn("lichess", false, 1, j);
+		 // board[1][j] = new Pawn("lichess", false, 1, j);
 		}
 
 		for (int j = 0; j < 8; j++) {

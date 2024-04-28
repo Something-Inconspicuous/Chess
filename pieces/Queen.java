@@ -69,7 +69,7 @@ public class Queen extends Piece {
 		validPanels.clear();
 		
 		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i < Math.abs(r*8-column); i++) {
+			for (int i = 1; i <= Math.abs(r*7-column); i++) {
 				
 				if (board[rank][(2*r-1)*i + column] != null) {
 					if(board[rank][(2*r-1)*i + column].getColor() == 1) {
@@ -85,7 +85,7 @@ public class Queen extends Piece {
 		}
 		
 		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i < Math.abs(r*8-rank); i++) {
+			for (int i = 1; i <= Math.abs(r*7-rank); i++) {
 				if (board[rank + (2*r-1)*i][column] != null) {
 					if (board[rank + (2*r-1)*i][column].getColor() == 1) {
 						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8- (rank + (2*r-1)*i)), new JPanel()));
@@ -147,18 +147,30 @@ public class Queen extends Piece {
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(93, 121, 145) : new Color(209, 209, 209));
 		prevPoint = parentSquare.getLocation();
-		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 0.6f)));
+		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 0.9f)));
 
 		// check if it is allowed to move.
-
+		//might be better to set this to the JLayeredPane.DRAG_LAYER instead of 2
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 		
 		revalidateMoves();
+		
 		for (JPanel pane : validPanels) {
 			System.out.println("bro what" + pane);
-
-			pane.setBackground(Color.red);
+			JButton temp = new JButton(Runner.moveCircle);
+			if(pane.getComponentCount() != 0) {
+				temp = new JButton(Runner.captureCircle);
+			}
+			
+			temp.setBackground(Color.BLACK);
+			temp.setFocusable(false);
+			temp.setFocusPainted(false);
+			temp.setBorderPainted(false);
+			temp.setOpaque(false);
+			temp.setContentAreaFilled(false);
+			pane.add(temp, 0);                                        
+		
 		}
 	}
 
