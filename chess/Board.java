@@ -104,6 +104,29 @@ public class Board {
 	public boolean canCastle() {
 		return false;
 	}
+	
+	public int countOfType(String type) {
+		int count = 0;
+		for (Piece[] x : board) {
+			for (Piece piece : x) {
+				if (piece.getName().equals(type)) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+	public int countOfType(String type, int color) {
+		int count = 0;
+		for (Piece[] x : board) {
+			for (Piece piece : x) {
+				if (piece.getName().equals(type) && piece.getColor() == color) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 
 	@Override
 	/**
