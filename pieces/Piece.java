@@ -28,15 +28,14 @@ public abstract class Piece implements MouseListener {
 
 	protected Board parent;
 	protected Point prevPoint;
-	
+
 	protected JPanel parentSquare;
 	protected Border originalBorder;
-	
+
 	protected abstract void revalidateMoves();
+
 	protected HashSet<JPanel> validPanels;
-	
-	
-	
+
 	/**
 	 * 
 	 * @return the value of the piece
@@ -84,7 +83,6 @@ public abstract class Piece implements MouseListener {
 	public int getColor() {
 		return (isWhite) ? 0 : 1;
 	}
-	
 
 	public JButton getPieceSprite() {
 		return pieceSprite;

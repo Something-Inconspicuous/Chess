@@ -169,14 +169,19 @@ public class Knight extends Piece {
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
-		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
-		boolean valid = validPanels.contains(toSquare);
-		if (valid) {
-			toSquare.add(pieceSprite);
-			Runner.boardGUI.clearBoard();
-		} else {
+		boolean valid = false;
+		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
-
+			valid = false;
+		} else {
+			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
+			valid = validPanels.contains(toSquare);
+			if (valid) {
+				toSquare.add(pieceSprite);
+				Runner.boardGUI.clearBoard();
+			} else {
+				parentSquare.add(pieceSprite);
+			}
 		}
 
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
