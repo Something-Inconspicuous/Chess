@@ -68,41 +68,44 @@ public class Rook extends Piece {
 		LinkedList<JPanel> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
-		
-		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i <= Math.abs(r*7-column); i++) {
-				
-				if (board[rank][(2*r-1)*i + column] != null) {
-					if(board[rank][(2*r-1)*i + column].getColor() == 1) {
-						tempList.add(tempMap.getOrDefault((char) (65 + (2*r-1)*i + column) + "" + (8-rank), new JPanel()));
+
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
+
+				if (board[rank][(2 * r - 1) * i + column] != null) {
+					if (board[rank][(2 * r - 1) * i + column].getColor() == 1) {
+						tempList.add(tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank),
+								new JPanel()));
 					}
 					break;
 				}
-				
-				tempList.add(tempMap.getOrDefault((char) (65 + (2*r-1)*i + column) + "" + (8-rank), new JPanel()));
-				System.out.println((char) (65 + (2*r-1)*i + column) + "" + (8-rank));
-				
+
+				tempList.add(
+						tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank), new JPanel()));
+				System.out.println((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank));
+
 			}
 		}
-		
-		for(int r = 0; r < 2; r++) {
-			for (int i = 1; i <= Math.abs(r*7-rank); i++) {
-				if (board[rank + (2*r-1)*i][column] != null) {
-					if (board[rank + (2*r-1)*i][column].getColor() == 1) {
-						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8- (rank + (2*r-1)*i)), new JPanel()));
+
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
+				if (board[rank + (2 * r - 1) * i][column] != null) {
+					if (board[rank + (2 * r - 1) * i][column].getColor() == 1) {
+						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)),
+								new JPanel()));
 					}
 					break;
 				}
-				
-				tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8- (rank + (2*r-1)*i)), new JPanel()));
-				System.out.println((char) (65 + column) + " " + (8- (rank + (2*r-1)*i)));
-				
+
+				tempList.add(
+						tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
+				System.out.println((char) (65 + column) + " " + (8 - (rank + (2 * r - 1) * i)));
+
 			}
 		}
-		
 
 		validPanels.addAll(tempList);
-	
+
 	}
 
 	@Override
@@ -124,7 +127,7 @@ public class Rook extends Piece {
 	public void mousePressed(MouseEvent e) {
 		Runner.boardGUI.clearBoard();
 		parentSquare = (JPanel) pieceSprite.getParent();
-		
+
 		originalBorder = parentSquare.getBorder();
 		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
@@ -136,30 +139,30 @@ public class Rook extends Piece {
 
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-		
+
 		revalidateMoves();
-		
+
 		for (JPanel pane : validPanels) {
 			System.out.println("bro what" + pane);
 			JButton temp = new JButton(Runner.moveCircle);
-			if(pane.getComponentCount() != 0) {
+			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
 			}
-			
+
 			temp.setBackground(Color.BLACK);
 			temp.setFocusable(false);
 			temp.setFocusPainted(false);
 			temp.setBorderPainted(false);
 			temp.setOpaque(false);
 			temp.setContentAreaFilled(false);
-			pane.add(temp, 0);                                        
-		
+			pane.add(temp, 0);
+
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
+
 		// remove pieceSprite from boardGUI, then add it again at the location of the
 		// cursor
 
@@ -172,18 +175,16 @@ public class Rook extends Piece {
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
-		
-		
 		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 		boolean valid = validPanels.contains(toSquare);
-		if(valid) {
+		if (valid) {
 			toSquare.add(pieceSprite);
 			Runner.boardGUI.clearBoard();
-		}else {
+		} else {
 			parentSquare.add(pieceSprite);
-			
+
 		}
-		
+
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
@@ -200,9 +201,9 @@ public class Rook extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
-		
+
 		parentSquare.setBorder(originalBorder);
-		
+
 	}
 
 	@Override

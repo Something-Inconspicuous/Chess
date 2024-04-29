@@ -47,10 +47,7 @@ public class Pawn extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
 				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-
-				System.out.println(e.getXOnScreen() + " " + e.getYOnScreen());
 			}
 
 			@Override
@@ -60,17 +57,17 @@ public class Pawn extends Piece {
 
 		});
 	}
-	
+
 	protected void revalidateMoves() {
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
 		LinkedList<JPanel> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
-		//will cause out of bounds errors
-		if(board[rank-1][column] == null) {
-			tempList.add(tempMap.get((char)(65 + column)+ "" + (8-(rank -1 ))));
+		// will cause out of bounds errors
+		if (board[rank - 1][column] == null) {
+			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank - 1))));
 		}
-		
+
 		validPanels.addAll(tempList);
 
 	}
@@ -94,7 +91,7 @@ public class Pawn extends Piece {
 	public void mousePressed(MouseEvent e) {
 		Runner.boardGUI.clearBoard();
 		parentSquare = (JPanel) pieceSprite.getParent();
-		
+
 		originalBorder = parentSquare.getBorder();
 		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
@@ -106,24 +103,23 @@ public class Pawn extends Piece {
 
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-		
+
 		revalidateMoves();
-		
+
 		for (JPanel pane : validPanels) {
-			System.out.println("bro what" + pane);
 			JButton temp = new JButton(Runner.moveCircle);
-			if(pane.getComponentCount() != 0) {
+			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
 			}
-			
+
 			temp.setBackground(Color.BLACK);
 			temp.setFocusable(false);
 			temp.setFocusPainted(false);
 			temp.setBorderPainted(false);
 			temp.setOpaque(false);
 			temp.setContentAreaFilled(false);
-			pane.add(temp, 0);                                        
-		
+			pane.add(temp, 0);
+
 		}
 	}
 
@@ -137,18 +133,17 @@ public class Pawn extends Piece {
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
-		System.out.println(e.getX() + " " + e.getY());
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 		boolean valid = validPanels.contains(toSquare);
-		if(valid) {
+		if (valid) {
 			toSquare.add(pieceSprite);
 			Runner.boardGUI.clearBoard();
-		}else {
+		} else {
 			parentSquare.add(pieceSprite);
-			
+
 		}
 
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
@@ -167,7 +162,7 @@ public class Pawn extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
-		
+
 		parentSquare.setBorder(originalBorder);
 	}
 

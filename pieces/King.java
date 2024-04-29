@@ -20,16 +20,16 @@ public class King extends Piece {
 
 	public King(String st, boolean isW, int rank, int column) {
 		name = "King";
-		nameChar = 'K'; 
+		nameChar = 'K';
 		value = 0;
 
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
 		this.column = column;
-		
+
 		super.validPanels = new HashSet<JPanel>();
-		
+
 		img = new ImageIcon(Runner.getScaledImage(
 				new ImageIcon(getClass().getResource("/images/" + st + "-king-" + ((isW) ? "white.png" : "black.png")))
 						.getImage(),
@@ -49,10 +49,7 @@ public class King extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
 				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-
-				System.out.println(e.getXOnScreen() + " " + e.getYOnScreen());
 			}
 
 			@Override
@@ -62,28 +59,26 @@ public class King extends Piece {
 
 		});
 	}
-	
+
 	protected void revalidateMoves() {
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
 		LinkedList<JPanel> tempList = new LinkedList<>();
-		
-		//i represents the columns here i am so sorry
-		for(int i = Math.max(1, column-1); i <= Math.min(7, column + 1); i++) {
-			for(int j = Math.max(rank-1, 1); j <= Math.min(7,  rank+1); j++) {
-				if(i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == 0)) {
+
+		// i represents the columns here i am so sorry
+		for (int i = Math.max(1, column - 1); i <= Math.min(7, column + 1); i++) {
+			for (int j = Math.max(rank - 1, 1); j <= Math.min(7, rank + 1); j++) {
+				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == 0)) {
 					continue;
 				}
-				
-				
-				tempList.add(tempMap.get((char)(65 + i) + "" + (8-j)));
-				System.out.println((char)(65 + i) + " " + (8-j));
+
+				tempList.add(tempMap.get((char) (65 + i) + "" + (8 - j)));
 			}
 		}
-		
+
 		validPanels.addAll(tempList);
-		
+
 	}
 
 	@Override
@@ -105,9 +100,9 @@ public class King extends Piece {
 	public void mousePressed(MouseEvent e) {
 		Runner.boardGUI.clearBoard();
 		parentSquare = (JPanel) pieceSprite.getParent();
-		
+
 		originalBorder = parentSquare.getBorder();
-		
+
 		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(93, 121, 145) : new Color(209, 209, 209));
@@ -118,24 +113,23 @@ public class King extends Piece {
 
 		Runner.frame.getLayeredPane().add(pieceSprite, 2);
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-		
+
 		revalidateMoves();
-		
+
 		for (JPanel pane : validPanels) {
-			System.out.println("bro what" + pane);
 			JButton temp = new JButton(Runner.moveCircle);
-			if(pane.getComponentCount() != 0) {
+			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
 			}
-			
+
 			temp.setBackground(Color.BLACK);
 			temp.setFocusable(false);
 			temp.setFocusPainted(false);
 			temp.setBorderPainted(false);
 			temp.setOpaque(false);
 			temp.setContentAreaFilled(false);
-			pane.add(temp, 0);                                        
-		
+			pane.add(temp, 0);
+
 		}
 	}
 
@@ -149,26 +143,25 @@ public class King extends Piece {
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
-		System.out.println(e.getX() + " " + e.getY());
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 		boolean valid = validPanels.contains(toSquare);
-		if(valid) {
+		if (valid) {
 			toSquare.add(pieceSprite);
 			Runner.boardGUI.clearBoard();
-		}else {
+		} else {
 			parentSquare.add(pieceSprite);
-			
+
 		}
-		
+
 		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		
+
 		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
@@ -180,7 +173,7 @@ public class King extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
-		
+
 		parentSquare.setBorder(originalBorder);
 	}
 
