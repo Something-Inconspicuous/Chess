@@ -1,3 +1,5 @@
+package logic;
+
 import java.util.ArrayList;
 
 import chess.Board;
@@ -140,20 +142,15 @@ public class Evaluator{
 			}
 			return value;
 		}
-	// Accessors
-	public int infty() {
-		return INFINITY;
-	}
+		public int infty() {
+			return INFINITY;
+		}
 
-	public int mate() {
-		return MATE;
-	}
-	
-	public int stalemate() {
-	  return STALEMATE;
-	}
+		public int mate() {
+			return MATE;
+		}
 
-	public int weightOfPawn() {
-		return pawnval;
-	}
+		public int stalemate() {
+			return STALEMATE;
+		}
 }
