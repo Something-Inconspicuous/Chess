@@ -20,16 +20,13 @@ public class Runner {
 
 	public static TitlePane titlePane;
 	public static BoardGUI boardGUI;
-	public static Board board;
-	
+
 	public static ImageIcon moveCircle;
 	public static ImageIcon captureCircle;
-	
+
 	static {
 		titlePane = new TitlePane();
-		board = new Board();
-		boardGUI = new BoardGUI();
-		
+		boardGUI = new BoardGUI(new Board());
 	}
 
 	public Runner() {
@@ -38,17 +35,13 @@ public class Runner {
 		frame.setPreferredSize(screensize);
 		frame.pack();
 		frame.setVisible(true);
-		
+
 		moveCircle = new ImageIcon(getScaledImage(
-				new ImageIcon(getClass().getResource("/images/move-circle.png"))
-				.getImage(),
-		80, 80, 0.5f));
-		
+				new ImageIcon(getClass().getResource("/images/move-circle.png")).getImage(), 80, 80, 0.5f));
+
 		captureCircle = new ImageIcon(getScaledImage(
-				new ImageIcon(getClass().getResource("/images/capture-circle.png"))
-				.getImage(),
-		80, 80, 0.5f));
-		
+				new ImageIcon(getClass().getResource("/images/capture-circle.png")).getImage(), 80, 80, 0.5f));
+
 		setScreen(titlePane);
 	}
 
@@ -87,7 +80,7 @@ public class Runner {
 				runGUI();
 			}
 		});
-		
+
 //		prints all font families available to swing
 //		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 //		for (String str : fonts) {

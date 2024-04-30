@@ -17,19 +17,17 @@ public class BoardGUI extends JPanel {
 	private JPanel boardPanel;
 	private Board board;
 	private HashMap<String, JPanel> posToSquareMap;
-	private JButton removeAllDots; 
-	
+	private JButton removeAllDots;
 
-	public BoardGUI() {
-		board = Runner.board;
+	public BoardGUI(Board gb) {
+		board = gb;
 		setBackground(Color.WHITE);
 
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9, 9));
-	
-		
+
 		removeAllDots = new JButton();
-		
+
 		posToSquareMap = new HashMap<String, JPanel>();
 		Piece[][] boardArr = board.getBoard();
 
@@ -42,7 +40,7 @@ public class BoardGUI extends JPanel {
 
 			boardPanel.add(temp);
 		}
-		
+
 		boardPanel.add(new JLabel());
 
 		// add each chess square
@@ -52,10 +50,10 @@ public class BoardGUI extends JPanel {
 						((((j) % 2) + (i % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
 				if (boardArr[i - 1][j - 1] != null)
 					tempPanel.add(boardArr[i - 1][j - 1].getPieceSprite());
-				
+
 				boardPanel.add(tempPanel);
-				
-				removeAllDots.addActionListener((GridSpace)tempPanel);
+
+				removeAllDots.addActionListener((GridSpace) tempPanel);
 			}
 
 			// adds the number coordinates on the side of the board (1-8)
@@ -70,38 +68,36 @@ public class BoardGUI extends JPanel {
 
 		add(boardPanel);
 	}
-	
-	
+
 	public JPanel getBoardPanel() {
 		return boardPanel;
 	}
-	
+
 	public Board getBoard() {
 		return board;
 	}
-	
+
 	public void clearBoard() {
-		 removeAllDots.doClick();
+		removeAllDots.doClick();
 	}
 
 	private JPanel createSquare(String pos, Color color) {
 		GridSpace temp = new GridSpace(pos, color);
 		temp.setLayout(new OverlayLayout(temp));
-		
+
 		temp.setFocusable(false);
 		temp.setPreferredSize(new Dimension(80, 80));
 		temp.setBackground(color);
-		System.out.println(pos);
 		posToSquareMap.put(pos, temp);
 		return temp;
 	}
-	
+
 	public HashMap<String, JPanel> getPositionMap() {
 		return posToSquareMap;
 	}
 
 //	exists so that the square can hold the value of a position
-	private class GridSpace extends JPanel implements ActionListener{
+	private class GridSpace extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		private String position;
 		private Color color;
@@ -117,10 +113,10 @@ public class BoardGUI extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			if(getComponentCount() > 0) {
-				ImageIcon tempIcon = (ImageIcon)((JButton)getComponent(0)).getIcon();
-				if(tempIcon == Runner.moveCircle || tempIcon == Runner.captureCircle) {
+
+			if (getComponentCount() > 0) {
+				ImageIcon tempIcon = (ImageIcon) ((JButton) getComponent(0)).getIcon();
+				if (tempIcon == Runner.moveCircle || tempIcon == Runner.captureCircle) {
 					remove(0);
 					repaint();
 				}
