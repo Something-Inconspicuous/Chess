@@ -7,7 +7,6 @@ import pieces.Piece;
 
 public class Evaluator{
 	
-	
 	//teama
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
@@ -84,7 +83,7 @@ public class Evaluator{
 		
 		
 		
-		public int eval(Board board) {
+		public static int eval(Board board) {
 			// Get current player
 			int player = board.toPlay();
 			int playerValue = 0;
@@ -100,19 +99,22 @@ public class Evaluator{
 			opponentValue = getValueOfPieces(pieces, opponent);
 
 			// Updates score based on castling
+			/*
 			if(board.hasCastled(player)) {
 				playerValue += CASTLE_BONUS;
 			}
 			if(board.hasCastled(opponent)) {
 				opponentValue += CASTLE_BONUS;
 			}
+			*/
+			
 					
 			// Return the difference between our current score and opponents
 			return playerValue - opponentValue;
 		}
 	
 	
-		private int getValueOfPieces(ArrayList<Piece> pieces, int player) {
+		private static int getValueOfPieces(ArrayList<Piece> pieces, int player) {
 		
 			// Determine pawn array to use
 			int[][] pawnpos = (player == WHITE) ? pawnposWhite : pawnposBlack;
@@ -142,15 +144,15 @@ public class Evaluator{
 			}
 			return value;
 		}
-		public int infty() {
+		public static int infty() {
 			return INFINITY;
 		}
 
-		public int mate() {
+		public static int mate() {
 			return MATE;
 		}
 
-		public int stalemate() {
+		public static int stalemate() {
 			return STALEMATE;
 		}
 }
