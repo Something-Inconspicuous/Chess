@@ -193,6 +193,7 @@ public class Queen extends Piece {
 			if (valid) {
 				toSquare.add(pieceSprite);
 				Runner.boardGUI.clearBoard();
+				
 			} else {
 				parentSquare.add(pieceSprite);
 			}
@@ -213,6 +214,7 @@ public class Queen extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
+			Runner.eval();
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
