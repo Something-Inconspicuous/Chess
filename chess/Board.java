@@ -10,6 +10,8 @@ public class Board {
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
 
+	private int currentTurn = 0;
+
 	public Board() {
 		for (int i = 0; i < 2; i++) {
 			board[i * 7][0] = new Rook("lichess", i != 0, i * 7, 0);
@@ -23,7 +25,7 @@ public class Board {
 		}
 
 		for (int j = 0; j < 8; j++) {
-		 // board[1][j] = new Pawn("lichess", false, 1, j);
+		  board[1][j] = new Pawn("lichess", false, 1, j);
 		}
 
 		for (int j = 0; j < 8; j++) {
@@ -75,7 +77,11 @@ public class Board {
 	 */
 	public int toPlay() {
 		// return 0 if white and 1 if black
-		return 0;
+		return currentTurn;
+	}
+
+	public void toggleTurn(){
+		currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
 	}
 
 	/**
@@ -88,7 +94,7 @@ public class Board {
 
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
-				if (piece.getColor() == player) {
+				if (piece != null && piece.getColor() == player) {
 					pieces.add(piece);
 				}
 			}
@@ -109,7 +115,7 @@ public class Board {
 		int count = 0;
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
-				if (piece.getName().equals(type)) {
+				if (piece != null && piece.getName().equals(type)) {
 					count++;
 				}
 			}
@@ -120,7 +126,7 @@ public class Board {
 		int count = 0;
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
-				if (piece.getName().equals(type) && piece.getColor() == color) {
+				if (piece != null && piece.getName().equals(type) && piece.getColor() == color) {
 					count++;
 				}
 			}

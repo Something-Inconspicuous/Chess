@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import chess.Board;
 import pieces.Piece;
 
-public class BetterEvaluator {
+public final class BetterEvaluator {
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
 
@@ -214,7 +214,7 @@ public class BetterEvaluator {
 	
 	
 	
-	public int eval(Board board) {
+	public static int eval(Board board) {
 
 		// Get current player
 		int player = board.toPlay();
@@ -238,7 +238,7 @@ public class BetterEvaluator {
 	}
 	
 	
-	private int getValueOfPieces(Board board, int player, boolean isEndGame) {
+	private static int getValueOfPieces(Board board, int player, boolean isEndGame) {
 
 		ArrayList<Piece> pieces = board.allPiecesOfColor(player);
 
@@ -343,7 +343,7 @@ public class BetterEvaluator {
 		return value;
 	}
 	
-	private int currentPhase(Board board) {		
+	private static int currentPhase(Board board) {		
 		int knightPhase = 1;
 		int bishopPhase = 1;
 		int rookPhase = 2;

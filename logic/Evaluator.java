@@ -79,9 +79,6 @@ public class Evaluator{
 		 {0,  0,  0,  0,  0,  0,  0,  0}
 		 };
 	
-	
-		
-		
 		
 		public static int eval(Board board) {
 			// Get current player

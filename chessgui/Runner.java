@@ -4,6 +4,8 @@ package chessgui;
 import javax.swing.*;
 
 import chess.Board;
+import logic.BetterEvaluator;
+import logic.Evaluator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -79,6 +81,11 @@ public class Runner {
 		g2.drawImage(img, 0, 0, w, h, null);
 		g2.dispose();
 		return resizedImage;
+	}
+
+	public static void eval(){
+		System.out.println("Simple eval: " + Evaluator.eval(board)); 
+		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
 	}
 
 	public static void main(String[] args) {
