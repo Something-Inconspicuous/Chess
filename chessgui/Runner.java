@@ -4,8 +4,6 @@ package chessgui;
 import javax.swing.*;
 
 import chess.Board;
-import logic.BetterEvaluator;
-import logic.Evaluator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,18 +18,18 @@ public class Runner {
 	public static JFrame frame;
 	private static final Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 
-	public static TitlePane titlePane;
+	public static TitleScreen titleScreen;
 	public static BoardGUI boardGUI;
 	public static Board board;
-	
+
 	public static ImageIcon moveCircle;
 	public static ImageIcon captureCircle;
-	
+
 	static {
-		titlePane = new TitlePane();
+		titleScreen = new TitleScreen();
 		board = new Board();
 		boardGUI = new BoardGUI();
-		
+
 	}
 
 	public Runner() {
@@ -40,18 +38,14 @@ public class Runner {
 		frame.setPreferredSize(screensize);
 		frame.pack();
 		frame.setVisible(true);
-		
+
 		moveCircle = new ImageIcon(getScaledImage(
-				new ImageIcon(getClass().getResource("/images/move-circle.png"))
-				.getImage(),
-		80, 80, 0.5f));
-		
+				new ImageIcon(getClass().getResource("/images/move-circle.png")).getImage(), 80, 80, 0.5f));
+
 		captureCircle = new ImageIcon(getScaledImage(
-				new ImageIcon(getClass().getResource("/images/capture-circle.png"))
-				.getImage(),
-		80, 80, 0.5f));
-		
-		setScreen(titlePane);
+				new ImageIcon(getClass().getResource("/images/capture-circle.png")).getImage(), 80, 80, 0.5f));
+
+		setScreen(titleScreen);
 	}
 
 	public static void setScreen(JPanel content) {
@@ -83,18 +77,13 @@ public class Runner {
 		return resizedImage;
 	}
 
-	public static void eval(){
-		System.out.println("Simple eval: " + Evaluator.eval(board)); 
-		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
-	}
-
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				runGUI();
 			}
 		});
-		
+
 //		prints all font families available to swing
 //		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 //		for (String str : fonts) {
