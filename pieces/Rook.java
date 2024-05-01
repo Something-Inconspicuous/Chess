@@ -49,10 +49,7 @@ public class Rook extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
 				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
-
-				System.out.println(e.getXOnScreen() + " " + e.getYOnScreen());
 			}
 
 			@Override
@@ -98,7 +95,6 @@ public class Rook extends Piece {
 
 				tempList.add(
 						tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
-				System.out.println((char) (65 + column) + " " + (8 - (rank + (2 * r - 1) * i)));
 
 			}
 		}
@@ -142,7 +138,6 @@ public class Rook extends Piece {
 		revalidateMoves();
 
 		for (JPanel pane : validPanels) {
-			System.out.println("bro what" + pane);
 			JButton temp = new JButton(Runner.moveCircle);
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
@@ -170,7 +165,6 @@ public class Rook extends Piece {
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
-		System.out.println(e.getX() + " " + e.getY());
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
@@ -194,7 +188,6 @@ public class Rook extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -203,12 +196,8 @@ public class Rook extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			//TEMP switch turn before eval
-			Runner.eval();
-			Runner.board.toggleTurn();
-
 		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+		System.out.println("board array after moving Rook: \n" + Runner.board.toString() + "\n");
 
 		parentSquare.setBorder(originalBorder);
 

@@ -166,8 +166,6 @@ public class King extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-
-		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -176,13 +174,8 @@ public class King extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-
-			//TEMP switch turn before eval
-			Runner.eval();
-			Runner.board.toggleTurn();
-
 		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+		System.out.println("board array after moving King: \n" + Runner.board.toString() + "\n");
 
 		parentSquare.setBorder(originalBorder);
 	}
