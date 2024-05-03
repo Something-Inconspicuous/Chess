@@ -88,15 +88,11 @@ public class Runner {
 		System.out.println("toplay" + board.toPlay());
 		System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
-		System.out.println("Advanced eval SIGMA (black is negative): " +sigma(BetterEvaluator.eval(board)));
+		System.out.println("Advanced eval SIGMA: " + (2.0*sigma((double)(BetterEvaluator.eval(board)/200.0))-1.0));
 	}
 
 	public static double sigma(double x){
-		if(board.toPlay() == 0){
-			return ((20.0)/(1.0+Math.exp(-x/250.0))-10.0);
-		} else {
-			return -((20.0)/(1.0+Math.exp(-x/250.0))-10.0);
-		}
+			return (1/(1.0+Math.exp(-x)));
 	}
 
 	public static void main(String[] args) {
