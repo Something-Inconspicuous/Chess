@@ -84,8 +84,19 @@ public class Runner {
 	}
 
 	public static void eval(){
+		Runner.board.toggleTurn();
+		System.out.println("toplay" + board.toPlay());
 		System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
+		System.out.println("Advanced eval SIGMA (black is negative): " +sigma(BetterEvaluator.eval(board)));
+	}
+
+	public static double sigma(double x){
+		if(board.toPlay() == 0){
+			return ((20.0)/(1.0+Math.exp(-x/250.0))-10.0);
+		} else {
+			return -((20.0)/(1.0+Math.exp(-x/250.0))-10.0);
+		}
 	}
 
 	public static void main(String[] args) {

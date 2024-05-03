@@ -167,7 +167,7 @@ public class Pawn extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 			//TEMP switch turn before eval
 			Runner.eval();
-			Runner.board.toggleTurn();
+			
 
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());

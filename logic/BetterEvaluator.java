@@ -219,7 +219,7 @@ public final class BetterEvaluator {
 		// Get current player
 		int player = board.toPlay();
 		int opponent = (player == WHITE) ? BLACK : WHITE;		
-
+		System.out.println("eval toplay" + player);
 		int openingPlayerValue = getValueOfPieces(board, player, false);
 		int endPlayerValue = getValueOfPieces(board, player, true);
 

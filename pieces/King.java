@@ -179,7 +179,7 @@ public class King extends Piece {
 
 			//TEMP switch turn before eval
 			Runner.eval();
-			Runner.board.toggleTurn();
+			
 
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
