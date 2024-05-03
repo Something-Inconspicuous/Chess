@@ -193,7 +193,6 @@ public class Queen extends Piece {
 			if (valid) {
 				toSquare.add(pieceSprite);
 				Runner.boardGUI.clearBoard();
-				
 			} else {
 				parentSquare.add(pieceSprite);
 			}
@@ -205,7 +204,6 @@ public class Queen extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -219,7 +217,7 @@ public class Queen extends Piece {
 			
 
 		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+		System.out.println("board array after moving Queen: \n" + Runner.board.toString() + "\n");
 
 		parentSquare.setBorder(originalBorder);
 

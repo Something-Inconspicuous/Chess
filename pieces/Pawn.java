@@ -64,8 +64,8 @@ public class Pawn extends Piece {
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
 		// will cause out of bounds errors
-		if (board[rank - 1][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank - 1))));
+		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
+			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
 
 		validPanels.addAll(tempList);
@@ -156,7 +156,6 @@ public class Pawn extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -170,11 +169,9 @@ public class Pawn extends Piece {
 			
 
 		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+		System.out.println("board array after moving Pawn: \n" + Runner.board.toString() + "\n");
 
 		parentSquare.setBorder(originalBorder);
-		
-		
 	}
 
 	@Override
