@@ -4,6 +4,8 @@ package chessgui;
 import javax.swing.*;
 
 import chess.Board;
+import logic.BetterEvaluator;
+import logic.Evaluator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -82,7 +84,11 @@ public class Runner {
 		System.out.println("toplay" + board.toPlay());
 		System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
-		System.out.println("Advanced eval SIGMA: " + (2.0*sigma((double)(BetterEvaluator.eval(board)/200.0))-1.0));
+		if(board.toPlay() == 0){
+			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/200.0))-10.0));
+		} else {
+			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/200.0))-10.0));
+		}
 	}
 
 	public static double sigma(double x){
