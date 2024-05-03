@@ -64,8 +64,9 @@ public class Pawn extends Piece {
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
 		// will cause out of bounds errors
-		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
+		
+		if (rank != 0 && rank != 7 && (board[rank + ((isWhite)? -1 : 1)][column] == null || board[rank + ((isWhite)? -1 : 1)][column].getColor() != getColor())) {
+			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
 		}
 
 		validPanels.addAll(tempList);
@@ -108,6 +109,8 @@ public class Pawn extends Piece {
 
 		for (JPanel pane : validPanels) {
 			JButton temp = new JButton(Runner.moveCircle);
+			
+			System.out.println("How Exactly");
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
 			}
@@ -143,8 +146,14 @@ public class Pawn extends Piece {
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
+			
 			if (valid) {
+				toSquare.remove(0);
+				if(toSquare.getComponentCount() != 0)
+					toSquare.remove(0);
 				toSquare.add(pieceSprite);
+				
+				
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -156,6 +165,7 @@ public class Pawn extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -164,14 +174,14 @@ public class Pawn extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			//TEMP switch turn before eval
-			Runner.eval();
 			
-
+			Runner.eval();
 		}
-		System.out.println("board array after moving Pawn: \n" + Runner.board.toString() + "\n");
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
+		
+		
 	}
 
 	@Override

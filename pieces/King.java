@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.Component;
 
 import chessgui.Runner;
 
@@ -67,9 +68,9 @@ public class King extends Piece {
 		LinkedList<JPanel> tempList = new LinkedList<>();
 
 		// i represents the columns here i am so sorry
-		for (int i = Math.max(1, column - 1); i <= Math.min(7, column + 1); i++) {
-			for (int j = Math.max(rank - 1, 1); j <= Math.min(7, rank + 1); j++) {
-				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == 0)) {
+		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
+			for (int j = Math.max(rank - 1, 0); j <= Math.min(7, rank + 1); j++) {
+				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
 					continue;
 				}
 
@@ -149,12 +150,20 @@ public class King extends Piece {
 		boolean valid = false;
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
+			
 			valid = false;
 		} else {
+		
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
+			
 			if (valid) {
+				toSquare.remove(0);
+				if(toSquare.getComponentCount() != 0)
+					toSquare.remove(0);
 				toSquare.add(pieceSprite);
+				
+				
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -166,6 +175,8 @@ public class King extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -174,13 +185,9 @@ public class King extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-
-			//TEMP switch turn before eval
 			Runner.eval();
-			
-
 		}
-		System.out.println("board array after moving King: \n" + Runner.board.toString() + "\n");
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 	}

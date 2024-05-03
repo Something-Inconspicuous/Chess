@@ -74,7 +74,7 @@ public class Knight extends Piece {
 				}
 
 				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null
-						|| board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() == 1) {
+						|| board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()) {
 					tempList.add(tempMap.get((char) (65 + column + 2 * (2 * i - 1)) + "" + (8 - (rank + (2 * j - 1)))));
 				}
 			}
@@ -88,7 +88,7 @@ public class Knight extends Piece {
 				}
 
 				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null
-						|| board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() == 1) {
+						|| board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()) {
 					tempList.add(tempMap.getOrDefault(
 							(char) (65 + column + (2 * j - 1)) + "" + (8 - (rank + 2 * (2 * i - 1))), new JPanel()));
 				}
@@ -176,8 +176,14 @@ public class Knight extends Piece {
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
+			
 			if (valid) {
+				toSquare.remove(0);
+				if(toSquare.getComponentCount() != 0)
+					toSquare.remove(0);
 				toSquare.add(pieceSprite);
+				
+				
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -189,6 +195,7 @@ public class Knight extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -197,13 +204,11 @@ public class Knight extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			//TEMP switch turn before eval
-			Runner.eval();
 			
-
+			Runner.eval();
 		}
-		System.out.println("board array after moving Knight: \n" + Runner.board.toString() + "\n");
-		
+		System.out.println("Post-update: \n" + Runner.board.toString());
+
 		parentSquare.setBorder(originalBorder);
 	}
 

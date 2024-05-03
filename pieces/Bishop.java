@@ -47,7 +47,10 @@ public class Bishop extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
+
 				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
+
+				System.out.println(e.getXOnScreen() + " " + e.getYOnScreen());
 			}
 
 			@Override
@@ -70,7 +73,7 @@ public class Bishop extends Piece {
 						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
 
 					if (board[row][col] != null) {
-						if (board[row][col].getColor() == 1) {
+						if (board[row][col].getColor() != getColor()) {
 							tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
 						}
 
@@ -158,10 +161,17 @@ public class Bishop extends Piece {
 			parentSquare.add(pieceSprite);
 			valid = false;
 		} else {
+			
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
+			
 			if (valid) {
+				toSquare.remove(0);
+				if(toSquare.getComponentCount() != 0)
+					toSquare.remove(0);
 				toSquare.add(pieceSprite);
+				
+				
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -173,6 +183,7 @@ public class Bishop extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -181,12 +192,9 @@ public class Bishop extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			//TEMP switch turn before eval
-			
 			Runner.eval();
-			
 		}
-		System.out.println("board array after moving Bishop: \n" + Runner.board.toString() + "\n");
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 

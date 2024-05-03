@@ -49,7 +49,9 @@ public class Rook extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
+
 				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
+
 			}
 
 			@Override
@@ -95,6 +97,7 @@ public class Rook extends Piece {
 
 				tempList.add(
 						tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
+				
 
 			}
 		}
@@ -138,6 +141,7 @@ public class Rook extends Piece {
 		revalidateMoves();
 
 		for (JPanel pane : validPanels) {
+			
 			JButton temp = new JButton(Runner.moveCircle);
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
@@ -165,6 +169,7 @@ public class Rook extends Piece {
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
+		
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
@@ -175,8 +180,14 @@ public class Rook extends Piece {
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
+			
 			if (valid) {
+				toSquare.remove(0);
+				if(toSquare.getComponentCount() != 0)
+					toSquare.remove(0);
 				toSquare.add(pieceSprite);
+				
+				
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -188,6 +199,7 @@ public class Rook extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -196,12 +208,9 @@ public class Rook extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			//TEMP switch turn before eval
 			Runner.eval();
-			
-
 		}
-		System.out.println("board array after moving Rook: \n" + Runner.board.toString() + "\n");
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 
