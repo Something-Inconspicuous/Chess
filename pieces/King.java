@@ -50,7 +50,34 @@ public class King extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
+				
+				
+				int x = e.getXOnScreen();
+				int y = e.getYOnScreen();
+				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
+				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
+				
+				int dX = x - boardX;
+				int dY = y - boardY;
+				
+				if(dX < 0) {
+					x = boardX;
+				}
+				
+				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
+					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
+				}
+				
+				if(dY < 0) {
+					y = boardY;
+				}
+				
+				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
+					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
+				}
+				
+				pieceSprite.setLocation(new Point(x - 40, y - 70));
+				
 			}
 
 			@Override
