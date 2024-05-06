@@ -17,12 +17,15 @@ import java.awt.Color;
 import chessgui.Runner;
 
 public class Pawn extends Piece {
-
+	
+	boolean firstMove = true;
+	
+	
 	public Pawn(String st, boolean isW, int rank, int column) {
 		name = "Pawn";
 		nameChar = 'P'; // supposed to be empty, changed for the sake of the toString
 		value = 0;
-
+		
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
@@ -89,8 +92,21 @@ public class Pawn extends Piece {
 		validPanels.clear();
 		// will cause out of bounds errors
 		
-		if (rank != 0 && rank != 7 && (board[rank + ((isWhite)? -1 : 1)][column] == null || board[rank + ((isWhite)? -1 : 1)][column].getColor() != getColor())) {
+		//soon wont be needed, cuz pawns can never reach those ranks
+		if (rank != 0 && rank != 7 && board[rank + ((isWhite)? -1 : 1)][column] == null) {
 			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+		}
+		
+		if(column != 0 && board[rank + ((isWhite)? -1 : 1)][column-1] != null && board[rank + ((isWhite)? -1 : 1)][column-1].getColor() != getColor()) {
+			tempList.add(tempMap.get((char) (65 + column - 1) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+		}
+		
+		if(column != 7 && board[rank + ((isWhite)? -1 : 1)][column+1] != null && board[rank + ((isWhite)? -1 : 1)][column+1].getColor() != getColor()) {
+			tempList.add(tempMap.get((char) (65 + column + 1) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+		}
+		
+		if(firstMove && board[rank + ((isWhite)? -2 : 2)][column] == null) {
+			tempList.add(tempMap.get((char) (65 + column ) + "" + (8 - (rank + ((isWhite)? -2 : 2)))));
 		}
 
 		validPanels.addAll(tempList);
@@ -193,7 +209,8 @@ public class Pawn extends Piece {
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
-
+			
+			firstMove = false;
 			rank = p.y / 80 - 1;
 			column = p.x / 80;
 
