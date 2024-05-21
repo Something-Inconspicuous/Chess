@@ -1,4 +1,4 @@
-package chess.util;
+package util;
 
 /**
  * @author Owen Durni (opd@andrew.cmu.edu)

@@ -1,6 +1,7 @@
-package chess.board;
+package chess;
 
-import chess.util.Creatable;
+import pieces.Piece;
+import util.Creatable;
 
 public interface Move
 <
@@ -83,5 +84,5 @@ extends Creatable<M>
    * Returns the capture piece if it is a capture, null otherwise.
    * @return
    */
-  public ArrayPiece getCapture();
+  public Piece getCapture();
 }

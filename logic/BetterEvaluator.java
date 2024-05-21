@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import chess.Board;
 import pieces.Piece;
 
-public final class BetterEvaluator {
+public final class BetterEvaluator implements Evaluator<B> {
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
 
