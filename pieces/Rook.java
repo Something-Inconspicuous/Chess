@@ -50,31 +50,7 @@ public class Rook extends Piece {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
-				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
-				
-				int dX = x - boardX;
-				int dY = y - boardY;
-				
-				if(dX < 0) {
-					x = boardX;
-				}
-				
-				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
-					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
-				}
-				
-				if(dY < 0) {
-					y = boardY;
-				}
-				
-				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
-					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
-				}
-				
-				pieceSprite.setLocation(new Point(x - 40, y - 70));
+				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 
 			}
 
@@ -96,7 +72,7 @@ public class Rook extends Piece {
 			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
 
 				if (board[rank][(2 * r - 1) * i + column] != null) {
-					if (board[rank][(2 * r - 1) * i + column].getColor() == 1) {
+					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
 						tempList.add(tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank),
 								new JPanel()));
 					}
@@ -112,7 +88,7 @@ public class Rook extends Piece {
 		for (int r = 0; r < 2; r++) {
 			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
 				if (board[rank + (2 * r - 1) * i][column] != null) {
-					if (board[rank + (2 * r - 1) * i][column].getColor() == 1) {
+					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
 						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)),
 								new JPanel()));
 					}
@@ -121,7 +97,6 @@ public class Rook extends Piece {
 
 				tempList.add(
 						tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
-				
 
 			}
 		}
@@ -165,7 +140,7 @@ public class Rook extends Piece {
 		revalidateMoves();
 
 		for (JPanel pane : validPanels) {
-			
+
 			JButton temp = new JButton(Runner.moveCircle);
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
@@ -193,7 +168,7 @@ public class Rook extends Piece {
 		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
-		
+
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
@@ -204,14 +179,13 @@ public class Rook extends Piece {
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
-			
+
 			if (valid) {
 				toSquare.remove(0);
-				if(toSquare.getComponentCount() != 0)
+				if (toSquare.getComponentCount() != 0)
 					toSquare.remove(0);
 				toSquare.add(pieceSprite);
-				
-				
+
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);

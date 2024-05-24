@@ -47,34 +47,7 @@ public class Bishop extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
-				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
-				
-				int dX = x - boardX;
-				int dY = y - boardY;
-				
-				if(dX < 0) {
-					x = boardX;
-				}
-				
-				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
-					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
-				}
-				
-				if(dY < 0) {
-					y = boardY;
-				}
-				
-				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
-					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
-				}
-				
-				pieceSprite.setLocation(new Point(x - 40, y - 70));
-
-				
+				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 			}
 
 			@Override
@@ -162,18 +135,11 @@ public class Bishop extends Piece {
 			temp.setOpaque(false);
 			temp.setContentAreaFilled(false);
 			pane.add(temp, 0);
-
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// remove pieceSprite from boardGUI, then add it again at the location of the
-		// cursor
-
-		// it will no longer be at that piece square since its on the layered panel
-		// ((JPanel)
-		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
@@ -181,21 +147,21 @@ public class Bishop extends Piece {
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		boolean valid = false;
+		boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
+
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
 			valid = false;
 		} else {
-			
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
-			
-			if (valid) {
+
+			if (valid && isTurn) {
 				toSquare.remove(0);
-				if(toSquare.getComponentCount() != 0)
+				if (toSquare.getComponentCount() != 0)
 					toSquare.remove(0);
 				toSquare.add(pieceSprite);
-				
-				
+
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -208,7 +174,7 @@ public class Bishop extends Piece {
 
 		// update the board to match the GUI
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
 
