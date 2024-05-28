@@ -1,6 +1,9 @@
 package Search;
 
 import java.util.List;
+import java.util.Timer;
+
+import logic.BetterEvaluator;
 
 
 /**
@@ -53,4 +56,16 @@ public class DFS
 	  //we don't know what the value of the best move is in DFS
 		return 0;
   }
+
+	@Override
+	public void setTimer(Timer t) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'setTimer'");
+	}
+
+	@Override
+	public void setEvaluator(BetterEvaluator e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'setEvaluator'");
+	}
 }
