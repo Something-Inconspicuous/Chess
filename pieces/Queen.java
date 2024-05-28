@@ -245,7 +245,7 @@ public class Queen extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 			Runner.eval();
 		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+		System.out.println(Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 
