@@ -42,21 +42,25 @@ public class SettingScreen extends JPanel implements ActionListener {
 		registerPanel = new JPanel();
 		registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.PAGE_AXIS));
 		registerPanel.setBackground(new Color(50, 50, 50));
+		registerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 0, 0));
 
-		
 		userFieldLabel = new JLabel("Username: ");
+		userFieldLabel.setFont(new Font("Serif", Font.BOLD, 30));
 		userFieldLabel.setForeground(Color.WHITE);
 		
-		userField = new HintTextField("Enter a username");
-		userField.setMaximumSize(new Dimension(800, 200));
+		userField = new HintTextField("   Enter a username");
+		userField.setFont(new Font("ARIAL", Font.PLAIN, 25));
+		userField.setMaximumSize(new Dimension(1600, 40));
 
 		passFieldLabel = new JLabel("Password: ");
+		passFieldLabel.setFont(new Font("Serif", Font.BOLD, 30));
 		passFieldLabel.setForeground(Color.WHITE);
 		
-		passField = new HintTextField("Enter a password");
+		passField = new HintTextField("   Enter a password");
+		passField.setFont(new Font("ARIAL", Font.PLAIN, 25));
+		passField.setMaximumSize(new Dimension(1600, 40));
 
 		registerButton = new JButton("Register");
-
 		
 		// profilePanel declaration and components
 		profilePanel = new JPanel();
@@ -96,9 +100,11 @@ public class SettingScreen extends JPanel implements ActionListener {
 		// add components to registerPanel
 		registerPanel.add(userFieldLabel);
 		registerPanel.add(userField);
+		registerPanel.add(Box.createVerticalStrut(50));
 		registerPanel.add(passFieldLabel);
 		registerPanel.add(passField);
-		registerPanel.add(backButton);
+		registerPanel.add(Box.createVerticalStrut(50));
+		registerPanel.add(registerButton);
 		
 		// add components to profilePanel
 		profileHeaderPanel.add(profileHeaderLabel);
