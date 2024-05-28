@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import pieces.*;
 
@@ -162,6 +163,16 @@ public class Board {
 		}
 
 		return returnStr;
+	}
+	
+	public LinkedList<String> calculateallthemoves(){
+		LinkedList<String> list = new LinkedList<String>();
+		
+		for(int i = 0; i < 8; i++) {
+			for(int j = 0; j < 8; j++) {
+				list.add(board[i][j].allMoveNotation)();
+			}
+		}
 	}
 
 }
