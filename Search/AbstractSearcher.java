@@ -4,6 +4,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import logic.BetterEvaluator;
+import logic.Evaluator;
+import logic.BetterEvaluator;
 
 
 public abstract class AbstractSearcher
@@ -11,20 +13,21 @@ public abstract class AbstractSearcher
   M extends Move<M>,
   B extends Board1<M,B>
 >
-  implements Searcher<M,B>
-{
-  protected BetterEvaluator<B> evaluator;
+  implements Searcher<M,B> {
+  protected Evaluator evaluator;
   protected int          minDepth;
   protected int          maxDepth;
   protected long         leafCount;
   protected long         nodeCount;
+
   
   private BestMovePublisher<M>
     bestMovePublisher = new BestMovePublisher<M>();
+}
 
   public void setEvaluator(Evaluator<B> e)
   {
-    evaluator = e;
+    evaluator =  e;
   }
 
   public void setFixedDepth(int depth)
