@@ -104,6 +104,42 @@ public class Rook extends Piece {
 		validPanels.addAll(tempList);
 
 	}
+	
+	public LinkedList<String> getAllMoves() {
+		LinkedList<String> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
+
+				if (board[rank][(2 * r - 1) * i + column] != null) {
+					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
+						tempList.add((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+					}
+					break;
+				}
+
+				tempList.add((char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+
+			}
+		}
+
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
+				if (board[rank + (2 * r - 1) * i][column] != null) {
+					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
+						tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)));
+					}
+					break;
+				}
+
+				tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)));
+
+			}
+		}
+		
+		return tempList;
+	}
 
 	@Override
 	protected void move(int r, int c) {
@@ -197,6 +233,7 @@ public class Rook extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -207,7 +244,7 @@ public class Rook extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 			Runner.eval();
 		}
-		System.out.println(Runner.board.toString());
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 

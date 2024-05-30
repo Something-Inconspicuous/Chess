@@ -142,6 +142,64 @@ public class Queen extends Piece {
 
 		validPanels.addAll(tempList);
 	}
+	
+	public LinkedList<String> getAllMoves() {
+		
+		LinkedList<String> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
+
+				if (board[rank][(2 * r - 1) * i + column] != null) {
+					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
+						tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+					}
+					break;
+				}
+
+				tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+
+			}
+		}
+
+		for (int r = 0; r < 2; r++) {
+			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
+				if (board[rank + (2 * r - 1) * i][column] != null) {
+					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
+						tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i))
+								);
+					}
+					break;
+				}
+
+				tempList.add((char)(65 + column) + "" + (rank) + "-" +
+					(char) (65 + column) + "" + ((rank + (2 * r - 1) * i)));
+
+			}
+		}
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
+						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
+
+					if (board[row][col] != null) {
+						if (board[row][col].getColor() != getColor()) {
+							tempList.add((char)(65 + column) + "" + (8-rank) + "-" + (char) (65 + col) + "" + (8 - row));
+						}
+
+						break;
+					}
+
+					tempList.add((char)(65 + column) + "" + (8-rank) + "-" + (char) (65 + col) + "" + (8 - row));
+				}
+			}
+		}
+		
+		return tempList;
+		
+	}
 
 	@Override
 	protected void move(int r, int c) {
@@ -245,7 +303,7 @@ public class Queen extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 			Runner.eval();
 		}
-		System.out.println(Runner.board.toString());
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 

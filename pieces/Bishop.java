@@ -40,7 +40,7 @@ public class Bishop extends Piece {
 		pieceSprite.setBorderPainted(false);
 		pieceSprite.setOpaque(false);
 		pieceSprite.setContentAreaFilled(false);
-		pieceSprite.setPreferredSize(new Dimension(100, 100));
+		pieceSprite.setPreferredSize(new Dimension(80, 80));
 
 		pieceSprite.addMouseListener(this);
 		pieceSprite.addMouseMotionListener(new MouseMotionListener() {
@@ -86,7 +86,35 @@ public class Bishop extends Piece {
 		validPanels.addAll(tempList);
 
 	}
+	
+	
+	public LinkedList<String> getAllMoves() {
+		LinkedList<String> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+	
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
+						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
 
+					if (board[row][col] != null) {
+						if (board[row][col].getColor() != getColor()) {
+							tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row));
+						}
+
+						break;
+					}
+
+					tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row));
+
+				}
+			}
+		}
+		
+		
+		return tempList;
+	}
+	
 	@Override
 	protected void move(int r, int c) {
 
@@ -173,6 +201,7 @@ public class Bishop extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -183,9 +212,10 @@ public class Bishop extends Piece {
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 			Runner.eval();
 		}
-		System.out.println(Runner.board.toString());
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
+
 	}
 
 	@Override

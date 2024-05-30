@@ -100,6 +100,43 @@ public class Knight extends Piece {
 		tempList.clear();
 
 	}
+	
+	public LinkedList<String> getAllMoves() {
+		LinkedList<String> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (!tempMap.containsKey((char) (65 + column + 2 * (2 * i - 1)) + "" + (8-(rank + (2 * j - 1))))) {
+					continue;
+				}
+
+				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null
+						|| board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()) {
+					tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))));
+				}
+			}
+
+		}
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (!tempMap.containsKey((char) (65 + column + (2 * j - 1)) + "" + (8- (rank + 2 * (2 * i - 1))))) {
+					continue;
+				}
+
+				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null
+						|| board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()) {
+					tempList.add((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))));
+				}
+
+			}
+		}
+		
+		return tempList;
+		
+	}
 
 	@Override
 	protected void move(int r, int c) {
@@ -195,6 +232,7 @@ public class Knight extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
+		System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -206,7 +244,7 @@ public class Knight extends Piece {
 
 			Runner.eval();
 		}
-		System.out.println(Runner.board.toString());
+		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 	}

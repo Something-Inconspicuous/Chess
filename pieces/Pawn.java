@@ -114,8 +114,8 @@ public class Pawn extends Piece {
 
 	}
 	
-	public LinkedList<String> allMovesNotation() {
-		
+	public LinkedList<String> getAllMoves() {
+	
 		LinkedList<String> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 	
@@ -123,21 +123,21 @@ public class Pawn extends Piece {
 
 		// soon wont be needed, cuz pawns can never reach those ranks
 		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-			tempList.add((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1))));
+			tempList.add((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))));
 		}
 
 		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
 				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()) {
-			tempList.add((char) (65 + column - 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1))));
+			tempList.add((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))));
 		}
 
 		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
 				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()) {
-			tempList.add((char) (65 + column + 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1))));
+			tempList.add((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))));
 		}
 
 		if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null) {
-			tempList.add((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -2 : 2))));
+			tempList.add((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -2 : 2))));
 		}
 
 		return tempList;

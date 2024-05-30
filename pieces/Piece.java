@@ -3,6 +3,7 @@ package pieces;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -67,7 +68,9 @@ public abstract class Piece implements MouseListener {
 	public int[] getPosition() {
 		return new int[] { rank, column };
 	}
-
+	
+	public abstract LinkedList<String> getAllMoves();
+		
 	/**
 	 * 
 	 * @param r
