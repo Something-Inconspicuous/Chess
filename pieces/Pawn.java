@@ -15,6 +15,7 @@ import java.awt.Point;
 import java.awt.Color;
 
 import chessgui.Runner;
+import chess.*;
 
 public class Pawn extends Piece {
 
@@ -114,16 +115,19 @@ public class Pawn extends Piece {
 
 	}
 	
-	public LinkedList<String> getAllMoves() {
+	public LinkedList<Move> getAllMoves() {
 	
-		LinkedList<String> tempList = new LinkedList<>();
+		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
+		
 	
 		// will cause out of bounds errors
 
 		// soon wont be needed, cuz pawns can never reach those ranks
 		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-			tempList.add((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))));
+			
+			String tempMove = (char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1)));
+			tempList.add(n));
 		}
 
 		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null

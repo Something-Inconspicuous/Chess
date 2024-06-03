@@ -69,7 +69,7 @@ public abstract class Piece implements MouseListener {
 		return new int[] { rank, column };
 	}
 	
-	public abstract LinkedList<String> getAllMoves();
+	public abstract LinkedList<Move> getAllMoves();
 		
 	/**
 	 * 

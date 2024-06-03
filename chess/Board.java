@@ -165,14 +165,25 @@ public class Board {
 		return returnStr;
 	}
 	
-	public LinkedList<String> calculateallthemoves(){
-		LinkedList<String> list = new LinkedList<String>();
+	public LinkedList<Move> calculateAllTheMoves(){
+		LinkedList<Move> list = new LinkedList<String>();
 		
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
-				list.add(board[i][j].allMoveNotation)();
+				if(board[i][j] == null)
+					continue;
+				
+				for(String s : board[i][j].getAllMoves()) {
+					System.out.println(s);
+				}
+				
+				
+				list.addAll(board[i][j].getAllMoves());
 			}
 		}
+		
+		return list;
+		
 	}
 
 }
