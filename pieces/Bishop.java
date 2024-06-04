@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
+import chess.*;
 
 import chessgui.Runner;
 
@@ -88,8 +89,8 @@ public class Bishop extends Piece {
 	}
 	
 	
-	public LinkedList<String> getAllMoves() {
-		LinkedList<String> tempList = new LinkedList<>();
+	public LinkedList<Move> getAllMoves() {
+		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 	
 		for (int i = 0; i < 2; i++) {
@@ -99,13 +100,13 @@ public class Bishop extends Piece {
 
 					if (board[row][col] != null) {
 						if (board[row][col].getColor() != getColor()) {
-							tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row));
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1));
 						}
 
 						break;
 					}
 
-					tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row));
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0));
 
 				}
 			}

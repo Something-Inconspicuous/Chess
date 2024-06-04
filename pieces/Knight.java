@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
+import chess.*;
 
 import chessgui.Runner;
 
@@ -101,8 +102,8 @@ public class Knight extends Piece {
 
 	}
 	
-	public LinkedList<String> getAllMoves() {
-		LinkedList<String> tempList = new LinkedList<>();
+	public LinkedList<Move> getAllMoves() {
+		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
 		
@@ -112,10 +113,14 @@ public class Knight extends Piece {
 					continue;
 				}
 
-				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null
-						|| board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()) {
-					tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))));
+				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 0));
+				}else if( board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 1));
 				}
+				
+					
+				
 			}
 
 		}
@@ -126,13 +131,17 @@ public class Knight extends Piece {
 					continue;
 				}
 
-				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null
-						|| board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()) {
-					tempList.add((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))));
+				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 0));
+
+				}else if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 1));
+
+				}
+						
 				}
 
 			}
-		}
 		
 		return tempList;
 		

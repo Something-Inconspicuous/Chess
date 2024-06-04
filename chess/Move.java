@@ -11,11 +11,12 @@ public class Move {
 	//u need a desitonation Row and jgb3j 
 	int dest_row;
 	int dest_col;
-	
+	String move;
 	
 	int type;
 	
 	public Move(String move, int type) {
+		this.move = move;
 		start_col = move.charAt(0) - 65;
 		start_row = move.charAt(1) - 65;
 		
@@ -25,6 +26,10 @@ public class Move {
 		this.type = type;
 	}
 	
+	
+	public String getMove() {
+		return move;
+	}
 	public int getStartRow() {
 		return start_row;
 	}
@@ -61,7 +66,5 @@ public class Move {
 		return type == 3;
 	}
 	
-	public static int moveType(String move) {
-		
-	}
+
 }

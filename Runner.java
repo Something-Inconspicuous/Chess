@@ -11,7 +11,7 @@ import pieces.Piece;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
+import chess.*;
 /**
  * runs the program
  * 
@@ -90,27 +90,9 @@ public class Runner {
 			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			
-			LinkedList<String> moves = board.calculateAllTheMoves();
+			LinkedList<Move> moves = board.calculateAllTheMoves();
 			
-			for(String move : moves) {
-				String src = move.substring(0, 2);
-				String to = move.substring(3);
-				
-				Piece temp = board.getBoard()[to.charAt(0)-65][to.charAt(1)-48];
-				
-				board.getBoard()[to.charAt(0)-65][to.charAt(1)-48] = board.getBoard()[src.charAt(0)-65][src.charAt(1)-48];
-				
-				board.getBoard()[src.charAt(0)-65][src.charAt(1)-48] = null;
-				
-				//muhammed do your stuff
-				
-				
-				board.getBoard()[src.charAt(0)-65][src.charAt(1)-48] = board.getBoard()[to.charAt(0)-65][to.charAt(1)-48];
-				
-				board.getBoard()[to.charAt(0)-65][to.charAt(1)-48] = temp;
-				
-				
-			}
+		
 		} else {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));

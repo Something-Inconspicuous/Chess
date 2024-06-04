@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
+
+import chess.Move;
+
 import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -143,22 +146,41 @@ public class Queen extends Piece {
 		validPanels.addAll(tempList);
 	}
 	
-	public LinkedList<String> getAllMoves() {
+	public LinkedList<Move> getAllMoves() {
 		
-		LinkedList<String> tempList = new LinkedList<>();
+		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
+						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
+
+					if (board[row][col] != null) {
+						if (board[row][col].getColor() != getColor()) {
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1));
+						}
+
+						break;
+					}
+
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0));
+
+				}
+			}
+		}
 		
 		for (int r = 0; r < 2; r++) {
 			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
 
 				if (board[rank][(2 * r - 1) * i + column] != null) {
 					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
-						tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 1));
 					}
 					break;
 				}
 
-				tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank));
+				tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0));
 
 			}
 		}
@@ -167,33 +189,13 @@ public class Queen extends Piece {
 			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
 				if (board[rank + (2 * r - 1) * i][column] != null) {
 					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
-						tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i))
-								);
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 1));
 					}
 					break;
 				}
 
-				tempList.add((char)(65 + column) + "" + (rank) + "-" +
-					(char) (65 + column) + "" + ((rank + (2 * r - 1) * i)));
+				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 0));
 
-			}
-		}
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
-						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
-
-					if (board[row][col] != null) {
-						if (board[row][col].getColor() != getColor()) {
-							tempList.add((char)(65 + column) + "" + (8-rank) + "-" + (char) (65 + col) + "" + (8 - row));
-						}
-
-						break;
-					}
-
-					tempList.add((char)(65 + column) + "" + (8-rank) + "-" + (char) (65 + col) + "" + (8 - row));
-				}
 			}
 		}
 		

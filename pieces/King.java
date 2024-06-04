@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
-
+import chess.*;
 import chessgui.Runner;
 
 public class King extends Piece {
@@ -80,9 +80,9 @@ public class King extends Piece {
 		validPanels.addAll(tempList);
 	}
 	
-	public LinkedList<String> getAllMoves() {
+	public LinkedList<Move> getAllMoves() {
 		
-		LinkedList<String> tempList = new LinkedList<>();
+		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 		
 		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
@@ -90,8 +90,13 @@ public class King extends Piece {
 				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
 					continue;
 				}
-
-				tempList.add((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j));
+				
+				if(board[j][i] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0));
+				}else {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1));
+				}
+				
 			}
 		}
 		

@@ -10,7 +10,7 @@ public class Board {
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
-
+	private Piece prevPiece;
 	private int currentTurn = 0;
 
 	public Board() {
@@ -166,24 +166,42 @@ public class Board {
 	}
 	
 	public LinkedList<Move> calculateAllTheMoves(){
-		LinkedList<Move> list = new LinkedList<String>();
+		LinkedList<Move> list = new LinkedList<Move>();
 		
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
 				if(board[i][j] == null)
 					continue;
-				
-				for(String s : board[i][j].getAllMoves()) {
-					System.out.println(s);
-				}
-				
-				
+			
 				list.addAll(board[i][j].getAllMoves());
 			}
 		}
 		
 		return list;
 		
+	}
+	
+	public void applyMove(Move move) {
+		String src = move.getMove().substring(0, 2);
+		String to = move.getMove().substring(3);
+		
+		Piece prevPiece = board[to.charAt(0)-65][to.charAt(1)-48];
+		
+		board[to.charAt(0)-65][to.charAt(1)-48] = board[src.charAt(0)-65][src.charAt(1)-48];
+		
+		board[src.charAt(0)-65][src.charAt(1)-48] = null;
+
+	}
+	
+	public void undoMove(Move move) {
+		
+		String src = move.getMove().substring(0, 2);
+		String to = move.getMove().substring(3);
+		
+		
+		board[src.charAt(0)-65][src.charAt(1)-48] = board[to.charAt(0)-65][to.charAt(1)-48];
+		
+		board[to.charAt(0)-65][to.charAt(1)-48] = prevPiece;
 	}
 
 }
