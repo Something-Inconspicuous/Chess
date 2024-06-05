@@ -5,11 +5,13 @@ import javax.swing.*;
 
 import chess.Board;
 import logic.BetterEvaluator;
+import logic.Evaluator;
+import pieces.Piece;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
+import chess.*;
 /**
  * runs the program
  * 
@@ -82,33 +84,15 @@ public class Runner {
 	public static void eval(){
 		Runner.board.toggleTurn();
 		System.out.println("toplay" + board.toPlay());
-		//System.out.println("Simple eval: " + Evaluator.eval(board)); 
+		System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
 		if(board.toPlay() == 0){
 			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			
-			LinkedList<String> moves = board.calculateAllTheMoves();
+			LinkedList<Move> moves = board.calculateAllTheMoves();
 			
-			for(String move : moves) {
-				String src = move.substring(0, 2);
-				String to = move.substring(3);
-				
-				Piece temp = board.getBoard()[to.charAt(0)-65][to.charAt(1)-48];
-				
-				board.getBoard()[to.charAt(0)-65][to.charAt(1)-48] = board.getBoard()[src.charAt(0)-65][src.charAt(1)-48];
-				
-				board.getBoard()[src.charAt(0)-65][src.charAt(1)-48] = null;
-				
-				//muhammed do your stuff
-				
-				
-				board.getBoard()[src.charAt(0)-65][src.charAt(1)-48] = board.getBoard()[to.charAt(0)-65][to.charAt(1)-48];
-				
-				board.getBoard()[to.charAt(0)-65][to.charAt(1)-48] = temp;
-				
-				
-			}
+		
 		} else {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));

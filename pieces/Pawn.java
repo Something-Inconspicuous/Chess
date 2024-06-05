@@ -15,17 +15,17 @@ import java.awt.Point;
 import java.awt.Color;
 
 import chessgui.Runner;
+import chess.*;
 
 public class Pawn extends Piece {
-	
+
 	boolean firstMove = true;
-	
-	
+
 	public Pawn(String st, boolean isW, int rank, int column) {
 		name = "Pawn";
 		nameChar = 'P'; // supposed to be empty, changed for the sake of the toString
 		value = 0;
-		
+
 		setType = st;
 		isWhite = isW;
 		this.rank = rank;
@@ -52,28 +52,28 @@ public class Pawn extends Piece {
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
 				int y = e.getYOnScreen();
-				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
-				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
-				
+				int boardX = (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
+				int boardY = (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
+
 				int dX = x - boardX;
 				int dY = y - boardY;
-				
-				if(dX < 0) {
+
+				if (dX < 0) {
 					x = boardX;
 				}
-				
-				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
+
+				if (dX > Runner.boardGUI.getBoardPanel().getWidth()) {
 					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
 				}
-				
-				if(dY < 0) {
+
+				if (dY < 0) {
 					y = boardY;
 				}
-				
-				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
-					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
+
+				if (dY > Runner.boardGUI.getBoardPanel().getHeight()) {
+					y = boardY + Runner.boardGUI.getBoardPanel().getHeight();
 				}
-				
+
 				pieceSprite.setLocation(new Point(x - 40, y - 70));
 			}
 
@@ -91,25 +91,59 @@ public class Pawn extends Piece {
 		Piece[][] board = Runner.board.getBoard();
 		validPanels.clear();
 		// will cause out of bounds errors
-		
-		//soon wont be needed, cuz pawns can never reach those ranks
-		if (rank != 0 && rank != 7 && board[rank + ((isWhite)? -1 : 1)][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+
+		// soon wont be needed, cuz pawns can never reach those ranks
+		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
+			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
-		
-		if(column != 0 && board[rank + ((isWhite)? -1 : 1)][column-1] != null && board[rank + ((isWhite)? -1 : 1)][column-1].getColor() != getColor()) {
-			tempList.add(tempMap.get((char) (65 + column - 1) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+
+		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
+				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()) {
+			tempList.add(tempMap.get((char) (65 + column - 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
-		
-		if(column != 7 && board[rank + ((isWhite)? -1 : 1)][column+1] != null && board[rank + ((isWhite)? -1 : 1)][column+1].getColor() != getColor()) {
-			tempList.add(tempMap.get((char) (65 + column + 1) + "" + (8 - (rank + ((isWhite)? -1 : 1)))));
+
+		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
+				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()) {
+			tempList.add(tempMap.get((char) (65 + column + 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
-		
-		if(firstMove && board[rank + ((isWhite)? -2 : 2)][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column ) + "" + (8 - (rank + ((isWhite)? -2 : 2)))));
+
+		if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null) {
+			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -2 : 2)))));
 		}
 
 		validPanels.addAll(tempList);
+
+	}
+	
+	public LinkedList<Move> getAllMoves() {
+	
+		LinkedList<Move> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		
+	
+		// will cause out of bounds errors
+
+		// soon wont be needed, cuz pawns can never reach those ranks
+		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
+				
+			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))), 0));
+		}
+
+		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
+				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()) {
+			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+		}
+
+		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
+				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()) {
+			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+		}
+
+		if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null) {
+			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -2 : 2))), 0));
+		}
+
+		return tempList;
 
 	}
 
@@ -149,7 +183,7 @@ public class Pawn extends Piece {
 
 		for (JPanel pane : validPanels) {
 			JButton temp = new JButton(Runner.moveCircle);
-			
+
 			System.out.println("How Exactly");
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
@@ -168,32 +202,27 @@ public class Pawn extends Piece {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// remove pieceSprite from boardGUI, then add it again at the location of the
-		// cursor
-
-		// it will no longer be at that piece square since its on the layered panel
-		// ((JPanel)
-		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
 		parentSquare.setBackground(
 				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
 		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		boolean valid = false;
+		boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
+		
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
 			valid = false;
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
-			
-			if (valid) {
+
+			if (valid && isTurn) {
 				toSquare.remove(0);
-				if(toSquare.getComponentCount() != 0)
+				if (toSquare.getComponentCount() != 0)
 					toSquare.remove(0);
 				toSquare.add(pieceSprite);
-				
-				
+
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -206,23 +235,22 @@ public class Pawn extends Piece {
 
 		// update the board to match the GUI
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
-			
+
 			firstMove = false;
 			rank = p.y / 80 - 1;
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			
+
 			Runner.eval();
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
-		
-		
+
 	}
 
 	@Override

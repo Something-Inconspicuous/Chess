@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
+import chess.*;
 
 import chessgui.Runner;
 
@@ -49,31 +50,7 @@ public class Knight extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
-				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
-				
-				int dX = x - boardX;
-				int dY = y - boardY;
-				
-				if(dX < 0) {
-					x = boardX;
-				}
-				
-				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
-					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
-				}
-				
-				if(dY < 0) {
-					y = boardY;
-				}
-				
-				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
-					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
-				}
-				
-				pieceSprite.setLocation(new Point(x - 40, y - 70));
+				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 
 			}
 
@@ -123,6 +100,51 @@ public class Knight extends Piece {
 		validPanels.addAll(tempList);
 		tempList.clear();
 
+	}
+	
+	public LinkedList<Move> getAllMoves() {
+		LinkedList<Move> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (!tempMap.containsKey((char) (65 + column + 2 * (2 * i - 1)) + "" + (8-(rank + (2 * j - 1))))) {
+					continue;
+				}
+
+				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 0));
+				}else if( board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 1));
+				}
+				
+					
+				
+			}
+
+		}
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (!tempMap.containsKey((char) (65 + column + (2 * j - 1)) + "" + (8- (rank + 2 * (2 * i - 1))))) {
+					continue;
+				}
+
+				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 0));
+
+				}else if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 1));
+
+				}
+						
+				}
+
+			}
+		
+		return tempList;
+		
 	}
 
 	@Override
@@ -194,20 +216,20 @@ public class Knight extends Piece {
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		boolean valid = false;
+		boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
 			valid = false;
 		} else {
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
-			
-			if (valid) {
+
+			if (valid && isTurn) {
 				toSquare.remove(0);
-				if(toSquare.getComponentCount() != 0)
+				if (toSquare.getComponentCount() != 0)
 					toSquare.remove(0);
 				toSquare.add(pieceSprite);
-				
-				
+
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -220,7 +242,7 @@ public class Knight extends Piece {
 
 		// update the board to match the GUI
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
 
@@ -228,7 +250,7 @@ public class Knight extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			
+
 			Runner.eval();
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());

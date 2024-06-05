@@ -13,8 +13,7 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
-import java.awt.Component;
-
+import chess.*;
 import chessgui.Runner;
 
 public class King extends Piece {
@@ -50,34 +49,7 @@ public class King extends Piece {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				
-				
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				int boardX = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX();
-				int boardY = (int)Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY();
-				
-				int dX = x - boardX;
-				int dY = y - boardY;
-				
-				if(dX < 0) {
-					x = boardX;
-				}
-				
-				if(dX > Runner.boardGUI.getBoardPanel().getWidth()) {
-					x = boardX + Runner.boardGUI.getBoardPanel().getWidth();
-				}
-				
-				if(dY < 0) {
-					y = boardY;
-				}
-				
-				if(dY > Runner.boardGUI.getBoardPanel().getHeight()) {
-					y =  boardY + Runner.boardGUI.getBoardPanel().getHeight();
-				}
-				
-				pieceSprite.setLocation(new Point(x - 40, y - 70));
-				
+				pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 			}
 
 			@Override
@@ -106,7 +78,29 @@ public class King extends Piece {
 		}
 
 		validPanels.addAll(tempList);
-
+	}
+	
+	public LinkedList<Move> getAllMoves() {
+		
+		LinkedList<Move> tempList = new LinkedList<>();
+		Piece[][] board = Runner.board.getBoard();
+		
+		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
+			for (int j = Math.max(rank - 1, 0); j <= Math.min(7, rank + 1); j++) {
+				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
+					continue;
+				}
+				
+				if(board[j][i] == null) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0));
+				}else {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1));
+				}
+				
+			}
+		}
+		
+		return tempList;
 	}
 
 	@Override
@@ -175,22 +169,22 @@ public class King extends Piece {
 				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
 		boolean valid = false;
+		boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
-			
+
 			valid = false;
 		} else {
-		
+
 			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
 			valid = validPanels.contains(toSquare);
-			
-			if (valid) {
+
+			if (valid && isTurn) {
 				toSquare.remove(0);
-				if(toSquare.getComponentCount() != 0)
+				if (toSquare.getComponentCount() != 0)
 					toSquare.remove(0);
 				toSquare.add(pieceSprite);
-				
-				
+
 				Runner.boardGUI.clearBoard();
 			} else {
 				parentSquare.add(pieceSprite);
@@ -204,7 +198,7 @@ public class King extends Piece {
 		// update the board to match the GUI
 
 		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
 

@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import pieces.*;
 
@@ -9,27 +10,31 @@ public class Board {
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
-
+	private Piece prevPiece;
 	private int currentTurn = 0;
 
 	public Board() {
+		this("default");
+	}
+
+	public Board(String type) {
 		for (int i = 0; i < 2; i++) {
-			board[i * 7][0] = new Rook("lichess", i != 0, i * 7, 0);
-			board[i * 7][1] = new Knight("lichess", i != 0, i * 7, 1);
-			board[i * 7][2] = new Bishop("lichess", i != 0, i * 7, 2);
-			board[i * 7][3] = new Queen("lichess", i != 0, i * 7, 3);
-			board[i * 7][4] = new King("lichess", i != 0, i * 7, 4);
-			board[i * 7][5] = new Bishop("lichess", i != 0, i * 7, 5);
-			board[i * 7][6] = new Knight("lichess", i != 0, i * 7, 6);
-			board[i * 7][7] = new Rook("lichess", i != 0, i * 7, 7);
+			board[i * 7][0] = new Rook(type, i != 0, i * 7, 0);
+			board[i * 7][1] = new Knight(type, i != 0, i * 7, 1);
+			board[i * 7][2] = new Bishop(type, i != 0, i * 7, 2);
+			board[i * 7][3] = new Queen(type, i != 0, i * 7, 3);
+			board[i * 7][4] = new King(type, i != 0, i * 7, 4);
+			board[i * 7][5] = new Bishop(type, i != 0, i * 7, 5);
+			board[i * 7][6] = new Knight(type, i != 0, i * 7, 6);
+			board[i * 7][7] = new Rook(type, i != 0, i * 7, 7);
 		}
 
 		for (int j = 0; j < 8; j++) {
-		  board[1][j] = new Pawn("lichess", false, 1, j);
+			board[1][j] = new Pawn(type, false, 1, j);
 		}
 
 		for (int j = 0; j < 8; j++) {
-			board[6][j] = new Pawn("lichess", true, 6, j);
+			board[6][j] = new Pawn(type, true, 6, j);
 		}
 
 	}
@@ -79,8 +84,12 @@ public class Board {
 		// return 0 if white and 1 if black
 		return currentTurn;
 	}
+	
+	public int getCurrentTurn() {
+		return currentTurn;
+	}
 
-	public void toggleTurn(){
+	public void toggleTurn() {
 		currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
 	}
 
@@ -110,7 +119,7 @@ public class Board {
 	public boolean canCastle() {
 		return false;
 	}
-	
+
 	public int countOfType(String type) {
 		int count = 0;
 		for (Piece[] x : board) {
@@ -122,6 +131,7 @@ public class Board {
 		}
 		return count;
 	}
+
 	public int countOfType(String type, int color) {
 		int count = 0;
 		for (Piece[] x : board) {
@@ -147,12 +157,51 @@ public class Board {
 				} else {
 					returnStr += "[ ]";
 				}
-				
-				returnStr += ((col+1)%8 == 0) ? "\n" : "";
+
+				returnStr += ((col + 1) % 8 == 0) ? "\n" : "";
 			}
 		}
 
 		return returnStr;
+	}
+	
+	public LinkedList<Move> calculateAllTheMoves(){
+		LinkedList<Move> list = new LinkedList<Move>();
+		
+		for(int i = 0; i < 8; i++) {
+			for(int j = 0; j < 8; j++) {
+				if(board[i][j] == null)
+					continue;
+			
+				list.addAll(board[i][j].getAllMoves());
+			}
+		}
+		
+		return list;
+		
+	}
+	
+	public void applyMove(Move move) {
+		String src = move.getMove().substring(0, 2);
+		String to = move.getMove().substring(3);
+		
+		Piece prevPiece = board[to.charAt(0)-65][to.charAt(1)-48];
+		
+		board[to.charAt(0)-65][to.charAt(1)-48] = board[src.charAt(0)-65][src.charAt(1)-48];
+		
+		board[src.charAt(0)-65][src.charAt(1)-48] = null;
+
+	}
+	
+	public void undoMove(Move move) {
+		
+		String src = move.getMove().substring(0, 2);
+		String to = move.getMove().substring(3);
+		
+		
+		board[src.charAt(0)-65][src.charAt(1)-48] = board[to.charAt(0)-65][to.charAt(1)-48];
+		
+		board[to.charAt(0)-65][to.charAt(1)-48] = prevPiece;
 	}
 
 }
