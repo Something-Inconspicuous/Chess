@@ -11,13 +11,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
 
-import chess.board.Board;
-import chess.board.Move;
-import chess.book.Book;
-import chess.search.AbstractSearcher;
-import chess.search.BoardInfo;
-import chess.util.LRUMap;
+import chess.Board;
+import util.LRUMap;
+
 
 /**
  * A chess searcher that uses:
@@ -32,8 +30,7 @@ import chess.util.LRUMap;
  * Check extension (searches one ply deeper when board is in check)
  */
 
-public class Negamax<M extends Move<M>, B extends Board1<M,B>>
-extends AbstractSearcher<M,B> {
+public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 
 	// How deep our quiescence search goes
 	private final int QUIESCENCE_MIN_DEPTH = 2;
@@ -44,70 +41,32 @@ extends AbstractSearcher<M,B> {
 	private final int TRANSPOSITION_INIT_ELEMS = 2 << 20;
 	private final int TRANSPOSITION_MAX_ELMS = TRANSPOSITION_INIT_ELEMS;
 	private final float TRANSPOSITION_LOAD_FACTOR = 0.75f;
-	private Map<Long, BoardInfo<M>> transpositionTable;
+	private Map<Long, BoardInfo<Move>> transpositionTable;
 
-	// Store the information about repetitions
-	private BoardCount boardCount = new BoardCount();
 
 	// The depth the iterative deepening is currently at
 	private int depthIteration = 0;
 
-	private B board;
-	private Book<M, B> book = new Book<M, B>();
+	private Board board;
 
 	// Variables for performance analysis
 	private ThreadMXBean bean;
 	private long nodeCount, startTime, endTime;
 	private int originalMinDepth = -1;
 
-	public M getBestMove(B board, int myTime, int opTime) {
+	public Move getBestMove(Board board, int myTime, int opTime) {
 		nodeCount = 0;
 		bean = ManagementFactory.getThreadMXBean();
 		startTime = bean.getCurrentThreadCpuTime();
 
 		this.board = board;		
-		transpositionTable = new LRUMap<Long, BoardInfo<M>>(TRANSPOSITION_INIT_ELEMS,
+		transpositionTable = new LRUMap<Long, BoardInfo<Move>>(TRANSPOSITION_INIT_ELEMS,
 				TRANSPOSITION_MAX_ELMS,
 				TRANSPOSITION_LOAD_FACTOR);
 
-		// Track current board to avoid repetitions
-		boardCount.increment(board);
+				
 
-		// Start the time - logic that figures out how much time
-		// we should have, is in the timer object. Also make sure
-		// we don't timeup until we've processed the minDepth's needed
-		timer.start(myTime, opTime);
-		timer.notOkToTimeup();
-
-		// Force ourselves to finish quickly when almost out of time
-		if (timer.hurryUp()) {
-			if (originalMinDepth < 0) {
-				originalMinDepth = minDepth;
-			}
-			setMinDepth(Math.min(minDepth, 4));
-		}
-		else if (originalMinDepth > 0) {
-			setMinDepth(originalMinDepth);
-		}
-
-		// Check our book for a good move
-		M bookMove = book.getMove(board);
-		if (bookMove != null) {
-
-			// Make sure it isn't a repetition
-			board.applyMove(bookMove);		
-			if (!boardCount.isRepetition(board)) {
-				reportNewBestMove(bookMove);
-
-				// Track the result so we don't repeat it
-				boardCount.increment(board);
-				board.undoMove();	
-				return bookMove;
-			}
-			board.undoMove();
-		}				
-
-		LinkedList<M> moves = generateOrderedMoves();
+		LinkedList<Move> moves = generateOrderedMoves();
 		Collections.sort(moves, moveComparator);
 
 		// Should never be called if we don't have any moves left
@@ -116,25 +75,19 @@ extends AbstractSearcher<M,B> {
 		}
 
 		int infinity = evaluator.infty();
-		M bestMove = moves.getFirst();
+		Move bestMove = moves.getFirst();
 		boolean timeout = false;
 
 		// To do Iterative deepening, we have to repeat our alpha-beta search
-		// from n = 1 ... depth. We keep track of the move ordering
+		// froMove n = 1 ... depth. We keep track of the move ordering
 		// so each future depth starts with the best possible moves	
 		for(depthIteration = 1; depthIteration <= maxDepth; depthIteration++) {
 
-			// We've hit the minimum depth, so timeup regularly
-			if(depthIteration >= minDepth) {
-				timer.okToTimeup();
-			}
+			// We've hit the minimuMove depth, so timeup regularly
+			
 
-			if(timer.timeup()) {
-				break;
-			}
-
-			// We may return from this call before we searched full depth, so verify result					    
-			M unverifiedBestMove = rootNegaMax(moves, depthIteration, -infinity, infinity);
+			// We may return froMove this call before we searched full depth, so verify result					    
+			Move unverifiedBestMove = rootNegaMax(moves, depthIteration, -infinity, infinity);
 			if (unverifiedBestMove != null) {
 				bestMove = unverifiedBestMove;
 				reportNewBestMove(bestMove);
@@ -148,31 +101,11 @@ extends AbstractSearcher<M,B> {
 			}
 		}	
 
-		if (Config.debug) {
-			
-			// Print search performance information		
-			int depthSearchedTo = timeout ? depthIteration - 2 : depthIteration - 1;
-			endTime = bean.getCurrentThreadCpuTime();
-			double elapsedTime = (endTime/1000000000.0) - (startTime/1000000000.0);
-			System.out.println("Elapsed time: " + NumberFormat.getNumberInstance(Locale.US).format(elapsedTime) + " seconds");
-			System.out.println("Timed out: " + timer.timeup());	
-			System.out.println("Depth: " + depthSearchedTo);	
-			double nodesPerSecond = nodeCount / elapsedTime;
-			System.out.println("Nodes searched: " + NumberFormat.getNumberInstance(Locale.US).format(nodeCount));
-			System.out.println("Nodes/s: " + NumberFormat.getNumberInstance(Locale.US).format((int) nodesPerSecond));		
-			System.out.println("Entries in transposition table: " + NumberFormat.getNumberInstance(Locale.US).format(transpositionTable.size()));
-			System.out.println("*******************************************************");
-		}
-		
-		// Track the result so we don't repeat it
-		board.applyMove(bestMove);
-		boardCount.increment(board);
-		board.undoMove();
 		return bestMove;
 	}
 
 	// negamax() at the root level, allowing us to keep track of the best move
-	private M rootNegaMax(LinkedList<M> moves, int depth, int alpha, int beta) {
+	private Move rootNegaMax(LinkedList<Move> moves, int depth, int alpha, int beta) {
 		nodeCount++;
 
 		// Extend search when we find a player in check
@@ -180,7 +113,7 @@ extends AbstractSearcher<M,B> {
 			depth++;
 		}
 
-		BoardInfo<M> boardInfo = transpositionTable.get(board.signature());
+		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 
 		// See if we have a cache hit
 		if((boardInfo != null) && (boardInfo.getDepth() >= depth)) {
@@ -213,15 +146,11 @@ extends AbstractSearcher<M,B> {
 
 		// Best thing we've seen so far is -infinity
 		int bestValue = -evaluator.infty();
-		M bestMove = moves.getFirst();
+		Move bestMove = moves.getFirst();
 		int value;
 
-		for (M move : moves) {
+		for (Move move : moves) {
 
-			// If we're out of time, get out of the loop and return failed value
-			if(timer.timeup()) {
-				return null;
-			}
 
 			// Compute the new best Value
 			board.applyMove(move);
@@ -259,7 +188,7 @@ extends AbstractSearcher<M,B> {
 		}
 
 		// See if we have a cache hit
-		BoardInfo<M> boardInfo = transpositionTable.get(board.signature());
+		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 
 		if((boardInfo != null) && (boardInfo.getDepth() >= depth)) {
 
@@ -286,10 +215,6 @@ extends AbstractSearcher<M,B> {
 			}
 		}
 
-		// Once we've seen a repetition already, consider that board a stalemate		
-		if (boardCount.isRepetition(board)) {
-			return -evaluator.stalemate();
-		}
 
 		// Base case
 		if (depth == 0) {
@@ -306,7 +231,7 @@ extends AbstractSearcher<M,B> {
 		}
 
 		// Get the moves we can make
-		LinkedList<M> moves = generateOrderedMoves();
+		LinkedList<Move> moves = generateOrderedMoves();
 
 		// No moves to make
 		if (moves.isEmpty()) {
@@ -327,15 +252,10 @@ extends AbstractSearcher<M,B> {
 			int value;
 
 			// We know it's not empty so get the first move to start
-			M bestMove = moves.getFirst();
+			Move bestMove = moves.getFirst();
 			value = -evaluator.infty();
 
-			for (M move : moves) {
-
-				// If we're out of time, get out of the loop and ignore these results
-				if(timer.timeup()) {
-					return -evaluator.infty();
-				}
+			for (Move move : moves) {
 
 				// Compute the new best Value
 				board.applyMove(move);
@@ -375,7 +295,7 @@ extends AbstractSearcher<M,B> {
 		int quiescenceDepth = depth + depthIteration;
 
 		// See if we have a cache hit
-		BoardInfo<M> boardInfo = transpositionTable.get(board.signature());
+		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 
 		if((boardInfo != null) && (boardInfo.getDepth() >= quiescenceDepth)) {
 
@@ -414,7 +334,7 @@ extends AbstractSearcher<M,B> {
 			return value;
 		}
 
-		LinkedList<M> moves = generateNonQuietMoves();					
+		LinkedList<Move> moves = generateNonQuietMoves();					
 
 		// We are in a "quiet" position, so finish
 		if(moves.isEmpty()) {
@@ -435,8 +355,8 @@ extends AbstractSearcher<M,B> {
 		int bestValue = -evaluator.infty();
 
 		// We know it's not empty...so just get any move to start
-		M bestMove = moves.getFirst();
-		for (M move : moves) {
+		Move bestMove = moves.getFirst();
+		for (Move move : moves) {
 
 			// If we're out of time, get out of the loop and ignore these results
 			if(timer.timeup()) {
@@ -471,7 +391,7 @@ extends AbstractSearcher<M,B> {
 	}
 
 	// Store results in the transposition table as a lower bound, upper bound, or exact value	
-	private void updateTranspositionTable(int alpha, int beta, int depth, int bestValue, M bestMove) {
+	private void updateTranspositionTable(int alpha, int beta, int depth, int bestValue, Move bestMove) {
 		if(bestValue <= alpha) {
 			updateTranspositionTable(bestValue, bestMove, BoardInfo.LOWER, depth);
 		}
@@ -484,18 +404,18 @@ extends AbstractSearcher<M,B> {
 	}
 
 	// Either add or update entry in transposition table
-	private void updateTranspositionTable(int value, M move, int type, int depth) {
-		BoardInfo<M> boardInfo = transpositionTable.get(board.signature());
+	private void updateTranspositionTable(int value, Move move, int type, int depth) {
+		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 		if(boardInfo != null) {
 			boardInfo.updateInfo(value, move, type, depth);
 		}
 		else {
-			transpositionTable.put(board.signature(), new BoardInfo<M>(value, move, type, depth));
+			transpositionTable.put(board.signature(), new BoardInfo<Move>(value, move, type, depth));
 		}
 	}
 
 	// Adds the killer moves to the top of the list
-	private void orderMoves(LinkedList<M> moves, BoardInfo<M> boardInfo) {
+	private void orderMoves(LinkedList<Move> moves, BoardInfo<Move> boardInfo) {
 		if(boardInfo != null) {
 			if(boardInfo.getSecondBestMove() != null) {
 				moves.remove(boardInfo.getSecondBestMove());
@@ -508,12 +428,12 @@ extends AbstractSearcher<M,B> {
 
 	// Order the moves (captures/promotions first)
 	// Doing a full sort in this method was not cost effective
-	private LinkedList<M> generateOrderedMoves() {
-		List<M> psmoves = board.generatePseudoMoves();
-		LinkedList<M> moves = new LinkedList<M>();
-		Set<M> setmoves = new HashSet<M>(256);
+	private LinkedList<Move> generateOrderedMoves() {
+		List<Move> psmoves = board.generatePseudoMoves();
+		LinkedList<Move> moves = new LinkedList<Move>();
+		Set<Move> setmoves = new HashSet<Move>(256);
 
-		for(M m : psmoves) {
+		for(Move m : psmoves) {
 			if(setmoves.add(m) && board.isLegalPseudoMove(m)) {			
 				if(m.isCapture() || m.isEnpassant() || m.isPromotion()) {
 					moves.addFirst(m);	
@@ -527,13 +447,13 @@ extends AbstractSearcher<M,B> {
 	}
 
 	// Generates a list of moves that are only captures and promotions
-	public LinkedList<M> generateNonQuietMoves() {
-		List<M> psmoves = board.generatePseudoMoves();
-		LinkedList<M> moves = new LinkedList<M>();
-		Set<M> setmoves = new HashSet<M>(256);
+	public LinkedList<Move> generateNonQuietMoves() {
+		List<Move> psmoves = board.generatePseudoMoves();
+		LinkedList<Move> moves = new LinkedList<Move>();
+		Set<Move> setmoves = new HashSet<Move>(256);
 
 		// Check all plausible moves
-		for(M m : psmoves) {
+		for(Move m : psmoves) {
 
 			// Has to be legal and unique
 			if(setmoves.add(m) && board.isLegalPseudoMove(m)) {
@@ -547,8 +467,8 @@ extends AbstractSearcher<M,B> {
 		return moves;
 	}
 
-	private Comparator<M> moveComparator = new Comparator<M>() {
-		public int compare (M move1, M move2) {
+	private Comparator<Move> moveComparator = new Comparator<Move>() {
+		public int compare (Move move1, Move move2) {
 			int score1, score2;
 
 			board.applyMove(move1);	
@@ -562,4 +482,10 @@ extends AbstractSearcher<M,B> {
 			return score1 - score2;
 		}
 	};
+
+	@Override
+	public void setTimer(Timer t) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'setTimer'");
+	}
 }
