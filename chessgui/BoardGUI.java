@@ -4,11 +4,7 @@ import chess.*;
 import pieces.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
-
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicSliderUI;
-
 import java.util.HashMap;
 
 /**
@@ -16,31 +12,24 @@ import java.util.HashMap;
  */
 public class BoardGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JPanel topUserPanel; // holds stats and pieces captured by the user on the top
-	private JPanel bottomUserPanel; // holds stats and pieces captured by the user on the bottom
-	private JPanel sidePanel; // holds move history, eval bar, etc
-	private JPanel boardPanel;
+
 	private Board board;
 	private HashMap<String, JPanel> posToSquareMap;
 	private JButton removeAllDots;
+	private JPanel boardPanel;
 	
-	private JPanel sideBar;
-	private JPanel moveHistoire;
-	
-	private JSlider evalBar;
-
 	public BoardGUI() {
 		setBackground(Color.DARK_GRAY);
 		board = Runner.board;
+		Piece[][] boardArr = board.getBoard();
+		
+		removeAllDots = new JButton();
+
+		posToSquareMap = new HashMap<String, JPanel>();
 
 		boardPanel = new JPanel();
 		boardPanel.setBackground(this.getBackground());
 		boardPanel.setLayout(new GridLayout(9, 9));
-
-		removeAllDots = new JButton();
-
-		posToSquareMap = new HashMap<String, JPanel>();
-		Piece[][] boardArr = board.getBoard();
 
 		// add letter coordinates outside of the board (a-h)
 		for (int i = 'a'; i < 'i'; i++) {
@@ -74,22 +63,10 @@ public class BoardGUI extends JPanel {
 			coordNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			boardPanel.add(coordNumberLabel);
 		}
-
+		
 		boardPanel.setBackground(this.getBackground());
-		
-		
-		evalBar = new JSlider(){
-            @Override
-            public void updateUI() {
-                setUI(new CustomSliderUI(this));
-            }
-        };
-		
-        JPanel content = new JPanel();
-		 content.setPreferredSize(new Dimension(300, 100));
-		 content.add(evalBar);	add(boardPanel);
-		add(content);
 
+		add(boardPanel);
 	}
 
 	public JPanel getBoardPanel() {
@@ -103,9 +80,9 @@ public class BoardGUI extends JPanel {
 	public void clearBoard() {
 		removeAllDots.doClick();
 	}
-	
-	public void setEval(double eval) {
-		evalBar.setValue((int)eval);
+
+	public HashMap<String, JPanel> getPositionMap() {
+		return posToSquareMap;
 	}
 
 	private JPanel createSquare(String pos, Color color) {
@@ -119,23 +96,16 @@ public class BoardGUI extends JPanel {
 		return temp;
 	}
 
-	public HashMap<String, JPanel> getPositionMap() {
-		return posToSquareMap;
-	}
-
 //	exists so that the square can hold the value of a position
 	private class GridSpace extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
+		@SuppressWarnings("unused")
 		private String position;
 		private Color color;
 
 		public GridSpace(String pos, Color col) {
 			position = pos;
 			color = col;
-		}
-
-		public String getPosition() {
-			return position;
 		}
 
 		@Override
@@ -151,111 +121,4 @@ public class BoardGUI extends JPanel {
 			setBackground(color);
 		}
 	}
-	
-
-	    private static class CustomSliderUI extends BasicSliderUI {
-
-	        private static final int TRACK_HEIGHT = 8;
-	        private static final int TRACK_WIDTH = 8;
-	        private static final int TRACK_ARC = 5;
-	        private static final Dimension THUMB_SIZE = new Dimension(30, 30);
-	        private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
-
-	        public CustomSliderUI(final JSlider b) {
-	            super(b);
-	        }
-
-	        @Override
-	        protected void calculateTrackRect() {
-	            super.calculateTrackRect();
-	            if (isHorizontal()) {
-	                trackRect.y = trackRect.y + (trackRect.height - TRACK_HEIGHT) / 2;
-	                trackRect.height = TRACK_HEIGHT;
-	            } else {
-	                trackRect.x = trackRect.x + (trackRect.width - TRACK_WIDTH) / 2;
-	                trackRect.width = TRACK_WIDTH;
-	            }
-	            trackShape.setRoundRect(trackRect.x, trackRect.y, trackRect.width, trackRect.height, TRACK_ARC, TRACK_ARC);
-	        }
-
-	        @Override
-	        protected void calculateThumbLocation() {
-	            super.calculateThumbLocation();
-	            if (isHorizontal()) {
-	                thumbRect.y = trackRect.y + (trackRect.height - thumbRect.height) / 2;
-	            } else {
-	                thumbRect.x = trackRect.x + (trackRect.width - thumbRect.width) / 2;
-	            }
-	        }
-
-	        @Override
-	        protected Dimension getThumbSize() {
-	            return THUMB_SIZE;
-	        }
-
-	        private boolean isHorizontal() {
-	            return slider.getOrientation() == JSlider.HORIZONTAL;
-	        }
-
-	        @Override
-	        public void paint(final Graphics g, final JComponent c) {
-	            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	            super.paint(g, c);
-	        }
-
-	        @Override
-	        public void paintTrack(final Graphics g) {
-	            Graphics2D g2 = (Graphics2D) g;
-	            Shape clip = g2.getClip();
-
-	            boolean horizontal = isHorizontal();
-	            boolean inverted = slider.getInverted();
-
-	            // Paint shadow.
-	            g2.setColor(new Color(170, 170 ,170));
-	            g2.fill(trackShape);
-
-	            // Paint track background.
-	            g2.setColor(new Color(200, 200 ,200));
-	            g2.setClip(trackShape);
-	            trackShape.y += 1;
-	            g2.fill(trackShape);
-	            trackShape.y = trackRect.y;
-
-	            g2.setClip(clip);
-
-	            // Paint selected track.
-	            if (horizontal) {
-	                boolean ltr = slider.getComponentOrientation().isLeftToRight();
-	                if (ltr) inverted = !inverted;
-	                int thumbPos = thumbRect.x + thumbRect.width / 2;
-	                if (inverted) {
-	                    g2.clipRect(0, 0, thumbPos, slider.getHeight());
-	                } else {
-	                    g2.clipRect(thumbPos, 0, slider.getWidth() - thumbPos, slider.getHeight());
-	                }
-
-	            } else {
-	                int thumbPos = thumbRect.y + thumbRect.height / 2;
-	                if (inverted) {
-	                    g2.clipRect(0, 0, slider.getHeight(), thumbPos);
-	                } else {
-	                    g2.clipRect(0, thumbPos, slider.getWidth(), slider.getHeight() - thumbPos);
-	                }
-	            }
-	            g2.setColor(Color.ORANGE);
-	            g2.fill(trackShape);
-	            g2.setClip(clip);
-	        }
-
-	        @Override
-	        public void paintThumb(final Graphics g) {
-	            g.setColor(new Color(246, 146, 36));
-	            g.fillOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
-	        }
-
-	        @Override
-	        public void paintFocus(final Graphics g) {}
-	    }
-	
 }

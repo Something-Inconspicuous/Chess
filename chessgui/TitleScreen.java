@@ -23,7 +23,7 @@ public class TitleScreen extends JPanel {
 		titleContents = new JPanel();
 		titleContents.setMaximumSize(new Dimension(2000, 200));
 
-		titleLabel = new JLabel("chess.");
+		titleLabel = new JLabel("good chess project");
 		titleLabel.setFont(new Font("Leelawadee", Font.PLAIN, 150));
 
 //		add button components
@@ -40,28 +40,32 @@ public class TitleScreen extends JPanel {
 		settingsButton = getFormattedButton("settings");
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				Runner.setScreen(Runner.settings);
+				Runner.setScreen(Runner.settings);
 			}
 		});
 
 		titleContents.add(titleLabel);
 
 		buttonContents.add(startButton);
+		buttonContents.add(Box.createVerticalStrut(5));
 		buttonContents.add(settingsButton);
 
+		add(Box.createVerticalStrut(50));
 		add(titleContents);
+		add(Box.createVerticalStrut(50));
 		add(buttonContents);
 	}
 
 	private JButton getFormattedButton(String name) {
 		JButton temp = new JButton(name);
-		temp.setSize(new Dimension(250, 50));
 
 		temp.setFocusable(false);
 		temp.setForeground(Color.WHITE);
 		temp.setBackground(Color.BLACK);
 		temp.setAlignmentX(CENTER_ALIGNMENT);
 
+		temp.setMaximumSize(new Dimension(150, 35));
+		
 		return temp;
 	}
 }
