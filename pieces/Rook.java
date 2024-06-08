@@ -14,7 +14,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Color;
 import chess.*;
-
 import chessgui.Runner;
 
 public class Rook extends Piece {

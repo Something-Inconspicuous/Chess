@@ -1,4 +1,4 @@
-package chess.search;
+package Search;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +9,10 @@ import chess.Board;
 public class BoardCount {
 
 	// Store the information about repetitions
-	private Map<Long, Count> map;
+	private Map<String, Count> map;
 	
 	public BoardCount() {
-		map = new HashMap<Long, Count>();
+		map = new HashMap<String, Count>();
 	}
 	
 	public int increment(Board board) {

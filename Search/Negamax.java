@@ -41,13 +41,16 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 	private final int TRANSPOSITION_INIT_ELEMS = 2 << 20;
 	private final int TRANSPOSITION_MAX_ELMS = TRANSPOSITION_INIT_ELEMS;
 	private final float TRANSPOSITION_LOAD_FACTOR = 0.75f;
-	private Map<Long, BoardInfo<Move>> transpositionTable;
+	private Map<String, BoardInfo<Move>> transpositionTable;
 
+    // Store the information about repetitions
+	private BoardCount boardCount = new BoardCount();
 
 	// The depth the iterative deepening is currently at
 	private int depthIteration = 0;
 
 	private Board board;
+    //private Book<Move, Board> book = new Book<Move, Board>();
 
 	// Variables for performance analysis
 	private ThreadMXBean bean;
@@ -60,11 +63,12 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		startTime = bean.getCurrentThreadCpuTime();
 
 		this.board = board;		
-		transpositionTable = new LRUMap<Long, BoardInfo<Move>>(TRANSPOSITION_INIT_ELEMS,
+		transpositionTable = new LRUMap<String, BoardInfo<Move>>(TRANSPOSITION_INIT_ELEMS,
 				TRANSPOSITION_MAX_ELMS,
 				TRANSPOSITION_LOAD_FACTOR);
 
-				
+		// Track current board to avoid repetitions
+		boardCount.increment(board);
 
 		LinkedList<Move> moves = generateOrderedMoves();
 		Collections.sort(moves, moveComparator);

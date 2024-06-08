@@ -4,7 +4,9 @@ package chessgui;
 import javax.swing.*;
 
 import chess.Board;
+import chess.Move;
 import logic.BetterEvaluator;
+import pieces.Piece;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -87,8 +89,8 @@ public class Runner {
 		if(board.toPlay() == 0){
 			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
-			
-			LinkedList<String> moves = board.calculateAllTheMoves();
+			/*
+			LinkedList<Move> moves = board.calculateAllTheMoves();
 			
 			for(String move : moves) {
 				String src = move.substring(0, 2);
@@ -109,6 +111,8 @@ public class Runner {
 				
 				
 			}
+			 */
+			
 		} else {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));

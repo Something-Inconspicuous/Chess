@@ -8,8 +8,8 @@ import logic.BetterEvaluator;
 
 public interface Searcher
 <
-	M extends Move<M>,
-	B extends Board1<M,B>
+	Move,
+	Board
 >
 {
 	/**
@@ -21,7 +21,7 @@ public interface Searcher
 	 * @param opTime the remaining time on your opponent's clock.
 	 * @return the best move from this current position.
 	 */
-	public M    getBestMove   (B board, int myTime, int opTime);
+	public Move    getBestMove   (Board board, int myTime, int opTime);
 	
 	/**
 	 * Sets the minimum depth to search.

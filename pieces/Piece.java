@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 
 import chess.*;
 
+
 public abstract class Piece implements MouseListener {
 
 	protected int value;

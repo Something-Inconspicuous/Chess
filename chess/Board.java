@@ -3,7 +3,6 @@ package chess;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import chessgui.Move;
 import pieces.*;
 
 public class Board {
@@ -180,6 +179,20 @@ public class Board {
 		
 		return list;
 		
+	}
+
+	public String signature(){
+		String out = "";
+		for(int i = 0; i<8; i++){
+			for(int j = 0; j<8; j++){
+				if(board[i][j] == null){
+					out += " ";
+				} else {
+					out+= board[i][j].getNameChar();
+				}
+			}
+		}
+		return out;
 	}
 	
 	public void applyMove(Move move) {

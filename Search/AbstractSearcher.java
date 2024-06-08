@@ -4,28 +4,26 @@ import java.util.Observable;
 import java.util.Observer;
 
 import logic.BetterEvaluator;
-import logic.Evaluator;
 import logic.BetterEvaluator;
 
 
 public abstract class AbstractSearcher
 <
-  M extends Move<M>,
-  B extends Board1<M,B>
+   Move,
+  Board
 >
-  implements Searcher<M,B> {
-  protected Evaluator evaluator;
+  implements Searcher<Move,Board> {
+  protected BetterEvaluator evaluator;
   protected int          minDepth;
   protected int          maxDepth;
   protected long         leafCount;
   protected long         nodeCount;
 
   
-  private BestMovePublisher<M>
-    bestMovePublisher = new BestMovePublisher<M>();
-}
+  private BestMovePublisher<Move>
+    bestMovePublisher = new BestMovePublisher<Move>();
 
-  public void setEvaluator(Evaluator<B> e)
+  public void setEvaluator(BetterEvaluator e)
   {
     evaluator =  e;
   }
@@ -65,7 +63,7 @@ public abstract class AbstractSearcher
     bestMovePublisher.addObserver(o);
   }
   
-  protected void reportNewBestMove(M move)
+  protected void reportNewBestMove(Move move)
   {
     bestMovePublisher.updateBestMove(move);
     
@@ -74,10 +72,10 @@ public abstract class AbstractSearcher
   
   private static class BestMovePublisher
   <
-    M extends Move<M>
+    Move
   > extends Observable
   {
-    public void updateBestMove( M move )
+    public void updateBestMove( Move move )
     {
       setChanged();
       notifyObservers(move);

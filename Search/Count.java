@@ -1,4 +1,4 @@
-package chess.search;
+package Search;
 
 // Stores a count of a move to be used in a hashMap
 public class Count {	
