@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import chessgui.Move;
 import pieces.*;
 
 public class Board {
