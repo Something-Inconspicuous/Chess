@@ -5,8 +5,6 @@ import javax.swing.*;
 
 import chess.Board;
 import logic.BetterEvaluator;
-import logic.Evaluator;
-import pieces.Piece;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -84,7 +82,7 @@ public class Runner {
 	public static void eval(){
 		Runner.board.toggleTurn();
 		System.out.println("toplay" + board.toPlay());
-		System.out.println("Simple eval: " + Evaluator.eval(board)); 
+		//System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
 		if(board.toPlay() == 0){
 			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
