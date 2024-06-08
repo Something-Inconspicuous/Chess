@@ -41,7 +41,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 		// should have a profile settings to the left, and preference settings on right
 		setLayout(new GridLayout(1, 2));
 		DEFAULT_GAP = 30;
-		currentUser = Runner.user;
+		//currentUser = Runner.user;
 		
 		
 		// registerPanel declaration and components

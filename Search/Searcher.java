@@ -3,14 +3,12 @@ package Search;
 import java.util.Observer;
 import java.util.Timer;
 
+import chess.Board;
+import chess.Move;
 import logic.BetterEvaluator;
 
 
 public interface Searcher
-<
-	Move,
-	Board
->
 {
 	/**
 	 * Searches the game tree and selects the best move based

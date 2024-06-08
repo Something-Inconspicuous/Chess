@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 
+import chess.Move;
 import chess.Board;
 import util.LRUMap;
 
@@ -30,7 +31,7 @@ import util.LRUMap;
  * Check extension (searches one ply deeper when board is in check)
  */
 
-public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
+public class Negamax extends AbstractSearcher{
 
 	// How deep our quiescence search goes
 	private final int QUIESCENCE_MIN_DEPTH = 2;
@@ -70,6 +71,12 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		// Track current board to avoid repetitions
 		boardCount.increment(board);
 
+		// Start the time - logic that figures out how much time
+		// we should have, is in the timer object. Also make sure
+		// we don't timeup until we've processed the minDepth's needed
+		//timer.start(myTime, opTime);
+		//timer.notOkToTimeup();
+
 		LinkedList<Move> moves = generateOrderedMoves();
 		Collections.sort(moves, moveComparator);
 
@@ -104,7 +111,9 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 				timeout = true;
 			}
 		}	
-
+		board.applyMove(bestMove);
+		boardCount.increment(board);
+		board.undoMove(bestMove);
 		return bestMove;
 	}
 
@@ -113,9 +122,11 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		nodeCount++;
 
 		// Extend search when we find a player in check
+		/* 
 		if(board.inCheck()) {
 			depth++;
 		}
+		*/
 
 		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 
@@ -159,7 +170,7 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 			// Compute the new best Value
 			board.applyMove(move);
 			value = -negamax(depth-1, -beta, -alpha);
-			board.undoMove();
+			board.undoMove(move);
 
 			// We found a new max, also keep track of move
 			if(value > bestValue) {
@@ -187,9 +198,12 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		nodeCount++;
 
 		// Extend search when we find a player in check
+		/* 
 		if(board.inCheck()) {
 			depth++;
 		}
+		*/
+		
 
 		// See if we have a cache hit
 		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
@@ -217,8 +231,13 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 			if(alpha >= beta) {
 				return boardInfo.getValue();
 			}
+			
 		}
 
+		// Once we've seen a repetition already, consider that board a stalemate		
+		if (boardCount.isRepetition(board)) {
+			return -evaluator.stalemate();
+		}
 
 		// Base case
 		if (depth == 0) {
@@ -239,12 +258,15 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 
 		// No moves to make
 		if (moves.isEmpty()) {
+			/*
 			if (board.inCheck()) {
 				return -evaluator.mate() - depth;
 			}
 			else {
 				return -evaluator.stalemate();
 			}
+			*/
+			return -evaluator.mate() - depth;
 		}			
 		else {
 
@@ -264,7 +286,7 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 				// Compute the new best Value
 				board.applyMove(move);
 				value = -negamax(depth-1, -beta, -alpha);
-				board.undoMove();
+				board.undoMove(move);
 
 				// We found a new max, also keep track of move
 				if(value > bestValue) {
@@ -363,14 +385,14 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		for (Move move : moves) {
 
 			// If we're out of time, get out of the loop and ignore these results
-			if(timer.timeup()) {
-				return -evaluator.infty();
-			}
+			//if(timer.timeup()) {
+			//	return -evaluator.infty();
+			//}
 
 			// Compute the new best value
 			board.applyMove(move);
 			value = -quiescenceSearch(depth-1, -beta, -alpha);
-			board.undoMove();
+			board.undoMove(move);
 
 			// We found a new max, also keep track of move
 			if(value > bestValue) {
@@ -393,7 +415,6 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		updateTranspositionTable(alpha, beta, quiescenceDepth, bestValue, bestMove);
 		return bestValue;
 	}
-
 	// Store results in the transposition table as a lower bound, upper bound, or exact value	
 	private void updateTranspositionTable(int alpha, int beta, int depth, int bestValue, Move bestMove) {
 		if(bestValue <= alpha) {
@@ -433,12 +454,12 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 	// Order the moves (captures/promotions first)
 	// Doing a full sort in this method was not cost effective
 	private LinkedList<Move> generateOrderedMoves() {
-		List<Move> psmoves = board.generatePseudoMoves();
+		List<Move> psmoves = board.calculateAllTheMoves();
 		LinkedList<Move> moves = new LinkedList<Move>();
 		Set<Move> setmoves = new HashSet<Move>(256);
 
 		for(Move m : psmoves) {
-			if(setmoves.add(m) && board.isLegalPseudoMove(m)) {			
+			if(setmoves.add(m)) {			
 				if(m.isCapture() || m.isEnpassant() || m.isPromotion()) {
 					moves.addFirst(m);	
 				}
@@ -452,7 +473,7 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 
 	// Generates a list of moves that are only captures and promotions
 	public LinkedList<Move> generateNonQuietMoves() {
-		List<Move> psmoves = board.generatePseudoMoves();
+		List<Move> psmoves = board.calculateAllTheMoves();
 		LinkedList<Move> moves = new LinkedList<Move>();
 		Set<Move> setmoves = new HashSet<Move>(256);
 
@@ -460,7 +481,7 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 		for(Move m : psmoves) {
 
 			// Has to be legal and unique
-			if(setmoves.add(m) && board.isLegalPseudoMove(m)) {
+			if(setmoves.add(m)) {
 
 				// Only place captures and promotions in this list
 				if(m.isCapture() || m.isEnpassant() || m.isPromotion()) {
@@ -477,11 +498,11 @@ public class Negamax<Move,Board> extends AbstractSearcher<Move,Board>{
 
 			board.applyMove(move1);	
 			score1 = evaluator.eval(board);
-			board.undoMove();
+			board.undoMove(move1);
 
 			board.applyMove(move2);
 			score2 = evaluator.eval(board);
-			board.undoMove();
+			board.undoMove(move2);
 
 			return score1 - score2;
 		}

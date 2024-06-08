@@ -5,14 +5,13 @@ import java.util.Observer;
 
 import logic.BetterEvaluator;
 import logic.BetterEvaluator;
+import chess.Board;
+import chess.Move;
 
 
 public abstract class AbstractSearcher
-<
-   Move,
-  Board
->
-  implements Searcher<Move,Board> {
+
+  implements Searcher {
   protected BetterEvaluator evaluator;
   protected int          minDepth;
   protected int          maxDepth;

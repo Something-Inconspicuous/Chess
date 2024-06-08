@@ -40,7 +40,7 @@ public class TitleScreen extends JPanel {
 		settingsButton = getFormattedButton("settings");
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Runner.setScreen(Runner.settings);
+				//Runner.setScreen(Runner.settings);
 			}
 		});
 
