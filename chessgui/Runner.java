@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import chess.Board;
 import chess.Move;
+import userInfo.*;
 import logic.BetterEvaluator;
 import pieces.Piece;
 
@@ -28,7 +29,10 @@ public class Runner {
 
 	public static ImageIcon moveCircle;
 	public static ImageIcon captureCircle;
-
+	
+	public static User user;
+	
+	public static SettingScreen settings;
 	static {
 		titleScreen = new TitleScreen();
 		board = new Board();
@@ -48,7 +52,8 @@ public class Runner {
 
 		captureCircle = new ImageIcon(getScaledImage(
 				new ImageIcon(getClass().getResource("/images/capture-circle.png")).getImage(), 80, 80, 0.5f));
-
+		
+		settings = new SettingScreen();
 		setScreen(titleScreen);
 	}
 

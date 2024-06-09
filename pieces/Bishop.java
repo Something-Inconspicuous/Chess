@@ -71,13 +71,22 @@ public class Bishop extends Piece {
 
 					if (board[row][col] != null) {
 						if (board[row][col].getColor() != getColor()) {
-							tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
+							if(validMove(row, col)) {
+								//System.out.println(row + " " + col);
+								tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
+							
+							}
+							
 						}
 
 						break;
 					}
-
-					tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
+					
+					if(validMove(row, col)) {
+					
+						tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
+					
+					}
 
 				}
 			}
@@ -88,24 +97,35 @@ public class Bishop extends Piece {
 	}
 	
 	
+	
+	
 	public LinkedList<Move> getAllMoves() {
 		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
-	
+		
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
 						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
 
 					if (board[row][col] != null) {
-						if (board[row][col].getColor() != getColor()) {
-							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1));
+						if (board[row][col].getColor() != getColor() && validMove(row, col)) {
+							
+							if(board[row][col].getNameChar() == 'K') {
+								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 4));
+							}else {
+								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1));
+							}
+							
 						}
 
 						break;
 					}
-
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0));
+					
+					if(validMove(row, col)) {
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0));
+					}
+					
 
 				}
 			}

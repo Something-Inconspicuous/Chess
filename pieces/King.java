@@ -72,8 +72,15 @@ public class King extends Piece {
 				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
 					continue;
 				}
+				
 
-				tempList.add(tempMap.get((char) (65 + i) + "" + (8 - j)));
+				if(validMove(j, i)) {
+					System.out.println(j + " " + i);
+					tempList.add(tempMap.get((char) (65 + i) + "" + (8 - j)));
+				}
+				
+				
+				
 			}
 		}
 

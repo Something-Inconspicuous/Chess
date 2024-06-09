@@ -94,27 +94,34 @@ public class Pawn extends Piece {
 
 		// soon wont be needed, cuz pawns can never reach those ranks
 		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
+			if(validMove(rank + ((isWhite) ? -1 : 1), column)) {
+				tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
+			}
+			
+			
+			if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null && validMove(rank + ((isWhite) ? -2 : 2), column)) {
+				tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -2 : 2)))));
+			}
 		}
 
 		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()) {
+				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column - 1)) {
 			tempList.add(tempMap.get((char) (65 + column - 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
 
 		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()) {
+				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column + 1)) {
 			tempList.add(tempMap.get((char) (65 + column + 1) + "" + (8 - (rank + ((isWhite) ? -1 : 1)))));
 		}
 
-		if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null) {
-			tempList.add(tempMap.get((char) (65 + column) + "" + (8 - (rank + ((isWhite) ? -2 : 2)))));
-		}
 
 		validPanels.addAll(tempList);
 
 	}
 	
+	public boolean isFirstMove() {
+		return firstMove;  
+	}
 	public LinkedList<Move> getAllMoves() {
 	
 		LinkedList<Move> tempList = new LinkedList<>();
@@ -125,23 +132,40 @@ public class Pawn extends Piece {
 
 		// soon wont be needed, cuz pawns can never reach those ranks
 		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-				
-			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))), 0));
+			
+			if(validMove(rank + ((isWhite) ? -1 : 1), column)) {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))), 0));
+			}
+			
+			
+			if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null && validMove(rank + ((isWhite) ? -2 : 2), column)) {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -2 : 2))), 0));
+			}
 		}
 
 		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()) {
-			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column-1)) {
+			
+			if(column > 1 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5 && board[rank + ((isWhite) ? -2 : 2)][column - 2].getNameChar() == 'K' && board[rank + ((isWhite) ? -2 : 2)][column - 2].getColor() != getColor()) {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 4));
+			}else {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+			}
+			
+			
 		}
 
 		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()) {
-			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column + 1)) {
+			
+			if(column < 6 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5 && board[rank + ((isWhite) ? -2 : 2)][column].getNameChar() == 'K' && board[rank + ((isWhite) ? -2 : 2)][column].getColor() != getColor()) {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 4));
+			}else {
+				tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1));
+			}
 		}
 
-		if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null) {
-			tempList.add(new Move((char)(65 + column) + "" + (rank-1) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -2 : 2))), 0));
-		}
+		
 
 		return tempList;
 

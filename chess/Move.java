@@ -55,7 +55,7 @@ public class Move {
 	}
 	
 	public boolean isEnpassant() {
-		return type == 4;
+		return type == 5;
 	}
 	
 	public boolean isCastle() {
@@ -64,6 +64,10 @@ public class Move {
 	
 	public boolean isPromotion() {
 		return type == 3;
+	}
+	
+	public boolean isCheck() {
+		return type == 4;
 	}
 	
 

@@ -72,15 +72,18 @@ public class Rook extends Piece {
 			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
 
 				if (board[rank][(2 * r - 1) * i + column] != null) {
-					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
+					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor() && validMove(rank, (2 * r - 1) * i + column)) {
 						tempList.add(tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank),
 								new JPanel()));
 					}
 					break;
 				}
-
-				tempList.add(
-						tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank), new JPanel()));
+				
+				if(validMove(rank, (2 * r - 1) * i + column)) {
+					tempList.add(
+							tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank), new JPanel()));
+				}
+				
 
 			}
 		}
@@ -88,15 +91,18 @@ public class Rook extends Piece {
 		for (int r = 0; r < 2; r++) {
 			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
 				if (board[rank + (2 * r - 1) * i][column] != null) {
-					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
+					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor() && validMove(rank + (2 * r - 1) * i, column)) {
 						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)),
 								new JPanel()));
 					}
 					break;
 				}
-
-				tempList.add(
-						tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
+				
+				if(validMove(rank + (2 * r - 1) * i, column)) {
+					tempList.add(
+							tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
+				}
+		
 
 			}
 		}
@@ -113,13 +119,21 @@ public class Rook extends Piece {
 			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
 
 				if (board[rank][(2 * r - 1) * i + column] != null) {
-					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor()) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 1));
+					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor() && validMove(rank, (2 * r - 1) * i + column)) {
+						if(board[rank][(2 * r - 1) * i + column].getNameChar() == 'K') {
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 4));
+						}else {
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 1));
+						}
+						
 					}
 					break;
 				}
-
-				tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0));
+				
+				if(validMove(rank, (2 * r - 1) * i + column)) {
+					tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0));
+				}
+				
 
 			}
 		}
@@ -127,13 +141,20 @@ public class Rook extends Piece {
 		for (int r = 0; r < 2; r++) {
 			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
 				if (board[rank + (2 * r - 1) * i][column] != null) {
-					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor()) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 1));
+					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor() && validMove(rank + (2 * r - 1) * i, column)) {
+						if(board[rank + (2 * r - 1) * i][column].getNameChar() == 'K') {
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 4));
+						}else {
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 1));
+						}
 					}
 					break;
 				}
-
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 0));
+				
+				if(validMove(rank + (2 * r - 1) * i, column)) {
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 0));
+				}
+				
 
 			}
 		}

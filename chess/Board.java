@@ -7,6 +7,7 @@ import pieces.*;
 
 public class Board {
 	Piece[][] board = new Piece[8][8];
+	public King[] kings = new King[2];
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
@@ -27,6 +28,8 @@ public class Board {
 			board[i * 7][5] = new Bishop(type, i != 0, i * 7, 5);
 			board[i * 7][6] = new Knight(type, i != 0, i * 7, 6);
 			board[i * 7][7] = new Rook(type, i != 0, i * 7, 7);
+			
+			kings[1-i] = (King)board[i * 7][4];
 		}
 
 		for (int j = 0; j < 8; j++) {
@@ -217,5 +220,6 @@ public class Board {
 		
 		board[to.charAt(0)-65][to.charAt(1)-48] = prevPiece;
 	}
+	
 
 }
