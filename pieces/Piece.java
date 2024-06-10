@@ -287,6 +287,7 @@ public boolean validMove(int r, int c) {
 	
 	public void actionPerformed(ActionEvent e) {
 		alrCalculated = false;
+		System.out.println("ACTIONLISTENER");
 	}
 	
 	

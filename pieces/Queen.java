@@ -136,7 +136,7 @@ public class Queen extends Piece {
 				}
 				
 				if(validMove(rank, (2 * r - 1) * i + column)) {
-					tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0, this, board[rank][(2 * r - 1) * i + column]));
+					tempList.add(new Move(((char)(65 + column) + "" + (rank)) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0, this, board[rank][(2 * r - 1) * i + column]));
 				}
 				
 
@@ -259,7 +259,7 @@ public class Queen extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
+		
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];

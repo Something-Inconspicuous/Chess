@@ -84,7 +84,7 @@ public class Rook extends Piece {
 				}
 				
 				if(validMove(rank, (2 * r - 1) * i + column)) {
-					tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0, this, board[rank][(2 * r - 1) * i + column]));
+					tempList.add(new Move(((char)(65 + column) + "" + (rank)) + "-" + (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0, this, board[rank][(2 * r - 1) * i + column]));
 				}
 				
 
@@ -132,6 +132,7 @@ public class Rook extends Piece {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		
 		Runner.boardGUI.clearBoard();
 		parentSquare = (JPanel) pieceSprite.getParent();
 
@@ -148,7 +149,9 @@ public class Rook extends Piece {
 		pieceSprite.setLocation(new Point(e.getXOnScreen() - 40, e.getYOnScreen() - 70));
 
 		revalidateMoves();
-
+		
+		
+		if(Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1)) {
 		for (JPanel pane : validPanels) {
 
 			JButton temp = new JButton(Runner.moveCircle);
@@ -165,62 +168,64 @@ public class Rook extends Piece {
 			pane.add(temp, 0);
 
 		}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
 		// remove pieceSprite from boardGUI, then add it again at the location of the
-		// cursor
+				// cursor
 
-		// it will no longer be at that piece square since its on the layered panel
-		// ((JPanel)
-		// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
-		parentSquare.setBackground(
-				((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
+				// it will no longer be at that piece square since its on the layered panel
+				// ((JPanel)
+				// Runner.boardGUI.getBoardPanel().getComponentAt(prevPoint)).remove(pieceSprite);
+				parentSquare.setBackground(
+						((((column) % 2) + (rank % 2)) % 2 == 1) ? new Color(65, 130, 185) : new Color(230, 230, 230));
+				Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
+						e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
 
-		Point p = new Point(e.getXOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getX(),
-				e.getYOnScreen() - (int) Runner.boardGUI.getBoardPanel().getLocationOnScreen().getY());
+				boolean valid = false;
+				boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
+				if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
+					parentSquare.add(pieceSprite);
+					valid = false;
+				} else {
+					JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
+					valid = validPanels.contains(toSquare);
 
-		boolean valid = false;
-		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
-			parentSquare.add(pieceSprite);
-			valid = false;
-		} else {
-			JPanel toSquare = ((JPanel) Runner.boardGUI.getBoardPanel().getComponentAt(p));
-			valid = validPanels.contains(toSquare);
+					if (valid && isTurn) {
+						toSquare.remove(0);
+						if (toSquare.getComponentCount() != 0)
+							toSquare.remove(0);
+						toSquare.add(pieceSprite);
 
-			if (valid) {
-				toSquare.remove(0);
-				if (toSquare.getComponentCount() != 0)
-					toSquare.remove(0);
-				toSquare.add(pieceSprite);
+						Runner.boardGUI.clearBoard();
+					} else {
+						parentSquare.add(pieceSprite);
+					}
+				}
 
-				Runner.boardGUI.clearBoard();
-			} else {
-				parentSquare.add(pieceSprite);
-			}
-		}
+				pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
 
-		pieceSprite.setIcon(new ImageIcon(Runner.getScaledImage(img.getImage(), 80, 80, 1)));
-		Runner.boardGUI.revalidate();
-		Runner.boardGUI.repaint();
+				Runner.boardGUI.revalidate();
+				Runner.boardGUI.repaint();
 
-		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
-		if (valid && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
-			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
-					/ 80];
+				// update the board to match the GUI
+				
+				if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
+					Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
+							/ 80];
 
-			rank = p.y / 80 - 1;
-			column = p.x / 80;
+					rank = p.y / 80 - 1;
+					column = p.x / 80;
 
-			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			Runner.eval();
-		}
-		System.out.println("Post-update: \n" + Runner.board.toString());
+					Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
+					Runner.eval();
+				}
+				System.out.println("Post-update: \n" + Runner.board.toString());
 
-		parentSquare.setBorder(originalBorder);
+				parentSquare.setBorder(originalBorder);
 
 	}
 

@@ -74,8 +74,10 @@ public class Knight extends Piece {
 					continue;
 				}
 
-				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null && validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 0, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
+				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null ) {
+					if(validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 0, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
+					}
 				}else if( board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor() && validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
 					
 					if(board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getNameChar() == 'K') {
@@ -98,9 +100,11 @@ public class Knight extends Piece {
 					continue;
 				}
 
-				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null && validMove(rank + 2 * (2 * i - 1), column + (2 * j - 1))) {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 0, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
-
+				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null ) {
+					
+					if(validMove(rank + 2 * (2 * i - 1), column + (2 * j - 1))) {
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 0, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
+					}
 				}else if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor() && validMove(rank + 2 * (2 * i - 1),column + (2 * j - 1) )) {
 					
 					if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getNameChar() == 'K') {
