@@ -218,7 +218,7 @@ public class Knight extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
+		//System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];

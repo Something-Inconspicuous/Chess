@@ -126,7 +126,6 @@ public class Pawn extends Piece {
 		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
 				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column + 1)) {
 			
-			System.out.println((rank + ((isWhite) ? -2 : 2)) + " " + column);
 			if(column < 6 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5 && board[rank + ((isWhite) ? -2 : 2)][column] != null && board[rank + ((isWhite) ? -2 : 2)][column].getNameChar() == 'K' && board[rank + ((isWhite) ? -2 : 2)][column].getColor() != getColor()) {
 				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 4, this, board[rank + ((isWhite) ? -1 : 1)][column + 1]));
 			}else {
@@ -177,7 +176,6 @@ public class Pawn extends Piece {
 		for (JPanel pane : validPanels) {
 			JButton temp = new JButton(Runner.moveCircle);
 
-			System.out.println("How Exactly");
 			if (pane.getComponentCount() != 0) {
 				temp = new JButton(Runner.captureCircle);
 			}
@@ -227,7 +225,7 @@ public class Pawn extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		System.out.println("Pre-update: \n" + Runner.board.toString());
+		//System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
