@@ -122,11 +122,11 @@ public class Negamax extends AbstractSearcher{
 		nodeCount++;
 
 		// Extend search when we find a player in check
-		/* 
+		
 		if(board.inCheck()) {
 			depth++;
 		}
-		*/
+	
 
 		BoardInfo<Move> boardInfo = transpositionTable.get(board.signature());
 
@@ -198,11 +198,11 @@ public class Negamax extends AbstractSearcher{
 		nodeCount++;
 
 		// Extend search when we find a player in check
-		/* 
+		
 		if(board.inCheck()) {
 			depth++;
 		}
-		*/
+		
 		
 
 		// See if we have a cache hit
@@ -258,14 +258,14 @@ public class Negamax extends AbstractSearcher{
 
 		// No moves to make
 		if (moves.isEmpty()) {
-			/*
+			
 			if (board.inCheck()) {
 				return -evaluator.mate() - depth;
 			}
 			else {
 				return -evaluator.stalemate();
 			}
-			*/
+			
 			return -evaluator.mate() - depth;
 		}			
 		else {

@@ -1,5 +1,6 @@
 package engine;
 
+
 import java.util.Observer;
 
 import Search.Negamax;
@@ -109,6 +110,7 @@ public class Engine {
 	 * @param myTime number of seconds left on the player's clock
 	 * @param opTime number of seconds left on the opponent's clock
 	 */
+    //IGNORE THE PARAMETERS WE DID NOT HAVE TIME TO IMPLEMENT THEM
 	public Move computeMove(int myTime, int opTime) {
 		return searcher.getBestMove(board, myTime, opTime);
 	}
