@@ -211,26 +211,27 @@ public class Board {
 	}
 	
 	public void applyMove(Move move) {
+		System.out.println("Move being applied");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
 		
-		Piece prevPiece = board[to.charAt(0)-65][to.charAt(1)-48];
+		System.out.println(src + " " + to);
+		prevPiece = board[8 - (to.charAt(1)-'0')][to.charAt(0)-'A'];
 		
-		board[to.charAt(0)-65][to.charAt(1)-48] = board[src.charAt(0)-65][src.charAt(1)-48];
+		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = board[(src.charAt(1)-'0')][src.charAt(0)-'A'];
 		
-		board[src.charAt(0)-65][src.charAt(1)-48] = null;
+		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
 
 	}
 	
 	public void undoMove(Move move) {
-		
+		System.out.println("Move being removed");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
 		
+		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = board[(to.charAt(1)-'0')][to.charAt(0)-'A'];
+		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = prevPiece;
 		
-		board[src.charAt(0)-65][src.charAt(1)-48] = board[to.charAt(0)-65][to.charAt(1)-48];
-		
-		board[to.charAt(0)-65][to.charAt(1)-48] = prevPiece;
 	}
 	
 	
