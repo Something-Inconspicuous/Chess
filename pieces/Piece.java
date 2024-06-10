@@ -107,8 +107,9 @@ public boolean validMove(int r, int c) {
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
 		Piece[][] board = Runner.board.getBoard();
 		Piece prevPiece = board[r][c];
-		board[r][c] = this;
 		board[rank][column] = null;
+		board[r][c] = this;
+		
 		
 		int prevRank = rank;
 		int prevCol = column;
