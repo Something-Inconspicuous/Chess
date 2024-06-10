@@ -51,8 +51,6 @@ public class Board {
 				forceRecalibrate.addActionListener(board[i][j]);
 			} 
 		}
-
-		System.out.println(toString());
 	}
 
 	/**
@@ -151,11 +149,10 @@ public class Board {
 
 	public int countOfType(String type, int color) {
 		int count = 0;
-		System.out.println(toString());
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
 				if (piece != null && piece.getName().equals(type) && piece.getColor() == color) {
-					//System.out.println(piece.getPosition()[0] + " " + piece.getPosition()[1]);
+					
 					count++;
 				}
 			}
@@ -220,7 +217,7 @@ public class Board {
 		String to = move.getMove().substring(3);
 		
 		System.out.println(src + " " + to);
-		prevPiece = board[8 - (to.charAt(1)-'0')][to.charAt(0)-'A'];
+		prevPiece = board[ (to.charAt(1)-'0')][to.charAt(0)-'A'];
 		
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = board[(src.charAt(1)-'0')][src.charAt(0)-'A'];
 		
@@ -232,6 +229,8 @@ public class Board {
 		System.out.println("Move being removed");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
+		
+		System.out.println(src + " " + to + " " + prevPiece.getRank() + " " + prevPiece.getColumn());
 		
 		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = board[(to.charAt(1)-'0')][to.charAt(0)-'A'];
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = prevPiece;
