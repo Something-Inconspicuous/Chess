@@ -11,6 +11,14 @@ import pieces.Piece;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -33,10 +41,24 @@ public class Runner {
 	public static User user;
 	
 	public static SettingScreen settings;
+	
+	public static File passwordMap;
+	public static File usersMap;
+	
+	  public static HashMap<String, String> savedPasswords;
+	  public static HashMap<String, User> savedUsers;
+	  
+	  public static UserDatabase userData;
 	static {
 		titleScreen = new TitleScreen();
 		board = new Board();
 		boardGUI = new BoardGUI();
+		
+		 passwordMap = new File("src/main/java/UserData/Passwords.dat");
+		   usersMap = new File("src/main/java/UserData/Users.dat");
+		   
+		   savedPasswords = new HashMap<String, String>();
+		   savedUsers = new HashMap<String, User>();
 
 	}
 
@@ -127,13 +149,84 @@ public class Runner {
 	public static double sigma(double x){
 			return (1/(1.0+Math.exp(-x)));
 	}
+	
+	
+	  public static void writeFile() {
+
+		    try {
+
+		      passwordMap.createNewFile();
+		      usersMap.createNewFile();
+
+		      FileOutputStream passOut = new FileOutputStream(passwordMap, false);
+		      ObjectOutputStream writePasswords = null;
+
+		      writePasswords = new ObjectOutputStream(passOut);
+		      writePasswords.writeObject(userData.getPasswords());
+		      writePasswords.close();
+		      passOut.close();
+
+		      FileOutputStream userOut = new FileOutputStream(usersMap, false);
+		      ObjectOutputStream writeUsers = null;
+		      // need to write the other ones as well
+		      writeUsers = new ObjectOutputStream(userOut);
+		      writeUsers.writeObject(userData.getUsers());
+		      writeUsers.close();
+		      userOut.close();
+
+		    } catch (FileNotFoundException ex) {
+		      ex.printStackTrace();
+		    } catch (IOException er) {
+		      er.printStackTrace();
+		    }
+
+		}
+	  
 
 	public static void main(String[] args) {
+		try {
+		      if (passwordMap.exists()) {
+		        FileInputStream input = new FileInputStream(passwordMap);
+		        ObjectInputStream readPasswords = new ObjectInputStream(input);
+
+		        savedPasswords = (HashMap<String, String>) readPasswords.readObject();
+
+		        readPasswords.close();
+		        input.close();
+
+		        input = new FileInputStream(usersMap);
+		        ObjectInputStream readUsers = new ObjectInputStream(input);
+
+		        savedUsers = (HashMap<String, User>) readUsers.readObject();
+
+		        readUsers.close();
+		        input.close();
+		      }
+
+		    } catch (Exception failed) {
+		      System.out.println("Unable to read files upon start up");
+		      failed.printStackTrace();
+		    }
+
+		    if (!savedPasswords.isEmpty())
+		      userData = new UserDatabase(savedUsers, savedPasswords);
+		    else
+		      userData = new UserDatabase();
+
+		
+		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				runGUI();
 			}
 		});
+		
+
+	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+	      public void run() {
+	        writeFile();
+	      }
+	    }, "Shutdown-thread"));
 
 //		prints all font families available to swing
 //		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();

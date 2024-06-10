@@ -60,32 +60,7 @@ public class King extends Piece {
 		});
 	}
 
-	protected void revalidateMoves() {
-		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
-		Piece[][] board = Runner.board.getBoard();
-		validPanels.clear();
-		LinkedList<JPanel> tempList = new LinkedList<>();
-
-		// i represents the columns here i am so sorry
-		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
-			for (int j = Math.max(rank - 1, 0); j <= Math.min(7, rank + 1); j++) {
-				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
-					continue;
-				}
-				
-
-				if(validMove(j, i)) {
-					System.out.println(j + " " + i);
-					tempList.add(tempMap.get((char) (65 + i) + "" + (8 - j)));
-				}
-				
-				
-				
-			}
-		}
-
-		validPanels.addAll(tempList);
-	}
+	
 	
 	public LinkedList<Move> getAllMoves() {
 		
@@ -94,14 +69,14 @@ public class King extends Piece {
 		
 		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
 			for (int j = Math.max(rank - 1, 0); j <= Math.min(7, rank + 1); j++) {
-				if (i == column && j == rank || (board[j][i] != null && board[j][i].getColor() == getColor())) {
+				if ((i == column && j == rank) || (board[j][i] != null && board[j][i].getColor() == getColor()) || !validMove(j, i)) {
 					continue;
 				}
 				
 				if(board[j][i] == null) {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0));
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0, this, board[j][i] ));
 				}else {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1));
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1, this, board[j][i]));
 				}
 				
 			}

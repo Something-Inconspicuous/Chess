@@ -62,54 +62,7 @@ public class Rook extends Piece {
 		});
 	}
 
-	protected void revalidateMoves() {
-		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
-		LinkedList<JPanel> tempList = new LinkedList<>();
-		Piece[][] board = Runner.board.getBoard();
-		validPanels.clear();
-
-		for (int r = 0; r < 2; r++) {
-			for (int i = 1; i <= Math.abs(r * 7 - column); i++) {
-
-				if (board[rank][(2 * r - 1) * i + column] != null) {
-					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor() && validMove(rank, (2 * r - 1) * i + column)) {
-						tempList.add(tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank),
-								new JPanel()));
-					}
-					break;
-				}
-				
-				if(validMove(rank, (2 * r - 1) * i + column)) {
-					tempList.add(
-							tempMap.getOrDefault((char) (65 + (2 * r - 1) * i + column) + "" + (8 - rank), new JPanel()));
-				}
-				
-
-			}
-		}
-
-		for (int r = 0; r < 2; r++) {
-			for (int i = 1; i <= Math.abs(r * 7 - rank); i++) {
-				if (board[rank + (2 * r - 1) * i][column] != null) {
-					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor() && validMove(rank + (2 * r - 1) * i, column)) {
-						tempList.add(tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)),
-								new JPanel()));
-					}
-					break;
-				}
-				
-				if(validMove(rank + (2 * r - 1) * i, column)) {
-					tempList.add(
-							tempMap.getOrDefault((char) (65 + column) + "" + (8 - (rank + (2 * r - 1) * i)), new JPanel()));
-				}
-		
-
-			}
-		}
-
-		validPanels.addAll(tempList);
-
-	}
+	
 	
 	public LinkedList<Move> getAllMoves() {
 		LinkedList<Move> tempList = new LinkedList<>();
@@ -121,9 +74,9 @@ public class Rook extends Piece {
 				if (board[rank][(2 * r - 1) * i + column] != null) {
 					if (board[rank][(2 * r - 1) * i + column].getColor() != getColor() && validMove(rank, (2 * r - 1) * i + column)) {
 						if(board[rank][(2 * r - 1) * i + column].getNameChar() == 'K') {
-							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 4));
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 4, this, board[rank][(2 * r - 1) * i + column]));
 						}else {
-							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 1));
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +  (char) (65 + (2 * r - 1) * i + column) + "" + (rank), 1, this, board[rank][(2 * r - 1) * i + column]));
 						}
 						
 					}
@@ -131,7 +84,7 @@ public class Rook extends Piece {
 				}
 				
 				if(validMove(rank, (2 * r - 1) * i + column)) {
-					tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0));
+					tempList.add(new Move((char) (65 + (2 * r - 1) * i + column) + "" + (rank), 0, this, board[rank][(2 * r - 1) * i + column]));
 				}
 				
 
@@ -143,16 +96,16 @@ public class Rook extends Piece {
 				if (board[rank + (2 * r - 1) * i][column] != null) {
 					if (board[rank + (2 * r - 1) * i][column].getColor() != getColor() && validMove(rank + (2 * r - 1) * i, column)) {
 						if(board[rank + (2 * r - 1) * i][column].getNameChar() == 'K') {
-							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 4));
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 4, this, board[rank + (2 * r - 1) * i][column]));
 						}else {
-							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 1));
+							tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 1, this, board[rank + (2 * r - 1) * i][column]));
 						}
 					}
 					break;
 				}
 				
 				if(validMove(rank + (2 * r - 1) * i, column)) {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 0));
+					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + (2 * r - 1) * i)), 0, this, board[rank + (2 * r - 1) * i][column]));
 				}
 				
 

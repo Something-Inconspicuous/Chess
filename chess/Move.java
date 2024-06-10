@@ -1,5 +1,5 @@
 package chess;
-
+import pieces.*;
 
 
 public class Move {
@@ -13,19 +13,32 @@ public class Move {
 	int dest_col;
 	String move;
 	
+	Piece srcPiece;
+	Piece endPiece;
 	int type;
 	
-	public Move(String move, int type) {
+	public Move(String move, int type, Piece srcPiece, Piece endPiece) {
 		this.move = move;
-		start_col = move.charAt(0) - 65;
-		start_row = move.charAt(1) - 65;
+		start_col = move.charAt(0) - 'A';
+		start_row = move.charAt(1) - '0';
 		
-		dest_row = move.charAt(3) - 65;
-		dest_col = move.charAt(4) - 65;
+		dest_col = move.charAt(3) - 'A';
+		dest_row = move.charAt(4) - '0';
 		
 		this.type = type;
+		
+		
+		this.srcPiece = srcPiece;
+		this.endPiece = endPiece;
 	}
 	
+	public Piece getSrcPiece() {
+		return srcPiece;
+	}
+	
+	public Piece getTargetPiece() {
+		return endPiece;
+	}
 	
 	public String getMove() {
 		return move;

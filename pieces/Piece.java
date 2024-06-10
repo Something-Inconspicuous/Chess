@@ -1,6 +1,8 @@
 package pieces;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +17,7 @@ import chess.*;
 import chessgui.Runner;
 
 
-public abstract class Piece implements MouseListener {
+public abstract class Piece implements MouseListener, ActionListener{
 
 	protected int value;
 	protected String name;
@@ -36,7 +38,7 @@ public abstract class Piece implements MouseListener {
 	protected JPanel parentSquare;
 	protected Border originalBorder;
 
-	protected abstract void revalidateMoves();
+	protected boolean alrCalculated;
 
 	protected HashSet<JPanel> validPanels;
 
@@ -80,6 +82,25 @@ public abstract class Piece implements MouseListener {
 		return column;
 	}
 	
+	protected void revalidateMoves() {
+		if(alrCalculated) {
+			return;
+		}
+		
+		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
+		validPanels.clear();
+		
+		LinkedList<Move> temp = getAllMoves();
+	
+		for(Move m : temp) {
+			System.out.println(m.getMove());
+			System.out.println(m.getDestCol() + " " + m.getDestRow());
+			validPanels.add(tempMap.get((char) (65 + m.getDestCol()) + "" + (8 - m.getDestRow())));
+		}
+		
+		alrCalculated = true;
+
+	}
 	//this should honestly bee in the board class but its a bit too late to rewrite code isnt it.
 public boolean validMove(int r, int c) {
 		
@@ -191,7 +212,7 @@ public boolean validMove(int r, int c) {
 						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
 
 					if (board[row][col] != null) {
-						if (board[row][col].getColor() != getColor() && board[row][col].getName().equals("Queen")) {
+						if (board[row][col].getColor() != getColor() && (board[row][col].getName().equals("Queen") ||  board[row][col].getName().equals("Bishop"))) {
 							board[r][c] = prevPiece;
 							board[prevRank][prevCol] = this;
 							
@@ -262,6 +283,10 @@ public boolean validMove(int r, int c) {
 
 	public JButton getPieceSprite() {
 		return pieceSprite;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		alrCalculated = false;
 	}
 	
 	

@@ -58,43 +58,7 @@ public class Bishop extends Piece {
 		});
 	}
 
-	protected void revalidateMoves() {
-		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
-		LinkedList<JPanel> tempList = new LinkedList<>();
-		Piece[][] board = Runner.board.getBoard();
-		validPanels.clear();
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
-						&& col < 8; row += (2 * j - 1), col += (2 * i - 1)) {
-
-					if (board[row][col] != null) {
-						if (board[row][col].getColor() != getColor()) {
-							if(validMove(row, col)) {
-								//System.out.println(row + " " + col);
-								tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
-							
-							}
-							
-						}
-
-						break;
-					}
-					
-					if(validMove(row, col)) {
-					
-						tempList.add(tempMap.get((char) (65 + col) + "" + (8 - row)));
-					
-					}
-
-				}
-			}
-		}
-
-		validPanels.addAll(tempList);
-
-	}
+	
 	
 	
 	
@@ -112,9 +76,9 @@ public class Bishop extends Piece {
 						if (board[row][col].getColor() != getColor() && validMove(row, col)) {
 							
 							if(board[row][col].getNameChar() == 'K') {
-								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 4));
+								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 4, this, board[row][col]));
 							}else {
-								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1));
+								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1, this, board[row][col]));
 							}
 							
 						}
@@ -123,7 +87,7 @@ public class Bishop extends Piece {
 					}
 					
 					if(validMove(row, col)) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0));
+						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0, this, board[row][col]));
 					}
 					
 

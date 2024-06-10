@@ -3,6 +3,8 @@ package chess;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import javax.swing.JButton;
+
 import pieces.*;
 
 public class Board {
@@ -13,12 +15,16 @@ public class Board {
 	private static final int BLACK = 1;
 	private Piece prevPiece;
 	private int currentTurn = 0;
-
+	
+	private JButton forceRecalibrate;
+	private LinkedList<Move> moveHistory;
 	public Board() {
 		this("default");
 	}
 
 	public Board(String type) {
+		forceRecalibrate = new JButton();
+		
 		for (int i = 0; i < 2; i++) {
 			board[i * 7][0] = new Rook(type, i != 0, i * 7, 0);
 			board[i * 7][1] = new Knight(type, i != 0, i * 7, 1);
@@ -39,7 +45,12 @@ public class Board {
 		for (int j = 0; j < 8; j++) {
 			board[6][j] = new Pawn(type, true, 6, j);
 		}
-
+		
+		for(int i = 6; i < 8; i++) {
+			for(int j = 0; j < 8; j++) {
+				forceRecalibrate.addActionListener(board[i][j]);
+			} 
+		}
 	}
 
 	/**
@@ -94,6 +105,7 @@ public class Board {
 
 	public void toggleTurn() {
 		currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
+		forceRecalibrate.doClick();
 	}
 
 	/**
