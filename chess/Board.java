@@ -233,5 +233,10 @@ public class Board {
 		board[to.charAt(0)-65][to.charAt(1)-48] = prevPiece;
 	}
 	
+	
+	public boolean inCheck() {
+		return kings[currentTurn].validMove(kings[currentTurn].getRank(), kings[currentTurn].getColumn());
+	}
+	
 
 }
