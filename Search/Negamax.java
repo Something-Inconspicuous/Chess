@@ -266,7 +266,6 @@ public class Negamax extends AbstractSearcher{
 				return -evaluator.stalemate();
 			}
 			
-			return -evaluator.mate() - depth;
 		}			
 		else {
 
