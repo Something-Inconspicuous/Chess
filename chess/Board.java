@@ -235,7 +235,7 @@ public class Board {
 	
 	
 	public boolean inCheck() {
-		return kings[currentTurn].validMove(kings[currentTurn].getRank(), kings[currentTurn].getColumn());
+		return !kings[currentTurn].validMove(kings[currentTurn].getRank(), kings[currentTurn].getColumn());
 	}
 	
 
