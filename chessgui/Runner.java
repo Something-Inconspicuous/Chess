@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import chess.Board;
 import chess.Move;
+import engine.Engine;
 import userInfo.*;
 import logic.BetterEvaluator;
 import pieces.Piece;
@@ -44,6 +45,8 @@ public class Runner {
 	
 	public static File passwordMap;
 	public static File usersMap;
+
+
 	
 	  public static HashMap<String, String> savedPasswords;
 	  public static HashMap<String, User> savedUsers;
@@ -62,12 +65,16 @@ public class Runner {
 
 	}
 
+	static Engine engine;
+
 	public Runner() {
 		frame = new JFrame("FREAKY chess");
 
 		frame.setPreferredSize(screensize);
 		frame.pack();
 		frame.setVisible(true);
+
+		engine = new Engine(999, 999, 3);
 
 		moveCircle = new ImageIcon(getScaledImage(
 				new ImageIcon(getClass().getResource("/images/move-circle.png")).getImage(), 80, 80, 0.5f));
@@ -143,6 +150,7 @@ public class Runner {
 		} else {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			//boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
+			engine.applyMove(engine.computeMove(999, 999));
 		}
 	}
 

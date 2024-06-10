@@ -198,11 +198,11 @@ public class Negamax extends AbstractSearcher{
 		nodeCount++;
 
 		// Extend search when we find a player in check
-		
+		/* 
 		if(board.inCheck()) {
 			depth++;
 		}
-		
+		*/
 		
 
 		// See if we have a cache hit
