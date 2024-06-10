@@ -229,9 +229,7 @@ public class Board {
 		System.out.println("Move being removed");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
-		
-		System.out.println(src + " " + to + " " + prevPiece.getRank() + " " + prevPiece.getColumn());
-		
+				
 		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = board[(to.charAt(1)-'0')][to.charAt(0)-'A'];
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = prevPiece;
 		
