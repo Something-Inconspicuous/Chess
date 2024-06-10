@@ -65,7 +65,8 @@ public class Runner {
 
 	}
 
-	static Engine engine;
+
+	public static Engine engine = new Engine(999, 999, 3);;
 
 	public Runner() {
 		frame = new JFrame("FREAKY chess");
@@ -74,7 +75,7 @@ public class Runner {
 		frame.pack();
 		frame.setVisible(true);
 
-		engine = new Engine(999, 999, 3);
+		
 
 		moveCircle = new ImageIcon(getScaledImage(
 				new ImageIcon(getClass().getResource("/images/move-circle.png")).getImage(), 80, 80, 0.5f));
@@ -116,7 +117,7 @@ public class Runner {
 	}
 
 	public static void eval(){
-		Runner.board.toggleTurn();
+		
 		System.out.println("toplay" + board.toPlay());
 		//System.out.println("Simple eval: " + Evaluator.eval(board)); 
 		System.out.println("Advanced eval: " + BetterEvaluator.eval(board));
@@ -124,7 +125,7 @@ public class Runner {
 			System.out.println("Advanced eval SIGMA: " + (20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			//boardGUI.setEval((20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			/*
-			LinkedList<Move> moves = board.calculateAllTheMoves();
+			LinkedList<ve> moves = board.calculateAllTheMoves();
 			
 			for(String move : moves) {
 				String src = move.substring(0, 2);
@@ -151,8 +152,8 @@ public class Runner {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			//boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			System.out.println("we move.");
-			System.out.println(engine.computeMove(999, 999).getMove());
-			board.applyMove(engine.computeMove(999, 999));
+			System.out.println(board.toString());
+			
 		}
 	}
 

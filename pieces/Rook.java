@@ -227,6 +227,9 @@ public class Rook extends Piece {
 
 				parentSquare.setBorder(originalBorder);
 				Runner.eval();
+				
+            Runner.board.applyMove(Runner.engine.computeMove(999, 999));
+			Runner.board.toggleTurn();
 	}
 
 	@Override

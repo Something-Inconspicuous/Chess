@@ -234,6 +234,8 @@ public class Knight extends Piece {
 
 		parentSquare.setBorder(originalBorder);
 		Runner.eval();
+		System.out.println(Runner.engine.computeMove(999, 999).getMove());
+            Runner.board.applyMove(Runner.engine.computeMove(999, 999));
 	}
 
 	@Override

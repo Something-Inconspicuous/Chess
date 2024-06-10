@@ -246,6 +246,9 @@ public class Pawn extends Piece {
 		
 		//System.out.println("Post-update: \n" + Runner.board.toString());
 		Runner.eval();
+		
+            Runner.board.applyMove(Runner.engine.computeMove(999, 999));
+			Runner.board.toggleTurn();
 	}
 
 	@Override

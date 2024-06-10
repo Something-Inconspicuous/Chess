@@ -73,6 +73,8 @@ public class Board {
 			throw new Exception();
 		}
 
+
+		
 		board[toRank][toColumn] = board[rank][column];
 		board[rank][column] = null;
 	}
@@ -223,7 +225,7 @@ public class Board {
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = board[(src.charAt(1)-'0')][src.charAt(0)-'A'];
 		
 		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
-
+		toggleTurn();
 	}
 	
 	public void undoMove(Move move) {
@@ -233,7 +235,7 @@ public class Board {
 				
 		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = board[(to.charAt(1)-'0')][to.charAt(0)-'A'];
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = prevPiece;
-		
+		toggleTurn();
 	}
 	
 	
