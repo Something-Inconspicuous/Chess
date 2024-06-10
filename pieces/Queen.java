@@ -273,6 +273,7 @@ public class Queen extends Piece {
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
+		Runner.eval();
 
 	}
 
