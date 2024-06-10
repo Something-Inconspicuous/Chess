@@ -112,6 +112,7 @@ public class Negamax extends AbstractSearcher{
 			}
 		}	
 		board.applyMove(bestMove);
+		System.out.println(board.toString());
 		boardCount.increment(board);
 		board.undoMove(bestMove);
 		return bestMove;
@@ -169,6 +170,7 @@ public class Negamax extends AbstractSearcher{
 
 			// Compute the new best Value
 			board.applyMove(move);
+			System.out.println(board.toString());
 			value = -negamax(depth-1, -beta, -alpha);
 			board.undoMove(move);
 
@@ -284,6 +286,7 @@ public class Negamax extends AbstractSearcher{
 
 				// Compute the new best Value
 				board.applyMove(move);
+				System.out.println(board.toString());
 				value = -negamax(depth-1, -beta, -alpha);
 				board.undoMove(move);
 
@@ -390,6 +393,7 @@ public class Negamax extends AbstractSearcher{
 
 			// Compute the new best value
 			board.applyMove(move);
+			System.out.println(board.toString());
 			value = -quiescenceSearch(depth-1, -beta, -alpha);
 			board.undoMove(move);
 
@@ -496,10 +500,12 @@ public class Negamax extends AbstractSearcher{
 			int score1, score2;
 
 			board.applyMove(move1);	
+			System.out.println(board.toString());
 			score1 = evaluator.eval(board);
 			board.undoMove(move1);
 
 			board.applyMove(move2);
+			System.out.println(board.toString());
 			score2 = evaluator.eval(board);
 			board.undoMove(move2);
 

@@ -149,6 +149,7 @@ public class Board {
 
 	public int countOfType(String type, int color) {
 		int count = 0;
+		
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
 				if (piece != null && piece.getName().equals(type) && piece.getColor() == color) {
