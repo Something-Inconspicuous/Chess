@@ -221,12 +221,12 @@ public class Rook extends Piece {
 					column = p.x / 80;
 
 					Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-					Runner.eval();
+					
 				}
 				System.out.println("Post-update: \n" + Runner.board.toString());
 
 				parentSquare.setBorder(originalBorder);
-
+				Runner.eval();
 	}
 
 	@Override
