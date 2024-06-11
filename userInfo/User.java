@@ -22,6 +22,8 @@ public class User {
 		password = pass;
 		piecePreference = pp;
 		themePreference = tp;
+		pfpPath = "/images/default-pfp-img.png";
+		pfp = new ImageIcon(getClass().getResource(pfpPath));
 	}
 
 	/**
@@ -80,7 +82,8 @@ public class User {
 	}
 
 	public String toString() {
-		return "Username: " + getUsername() + "\nPassword: " + getPassword();
+		return "Username: " + getUsername() + "\nPassword: " + getPassword() + "\nPiece Pref: " + getPreferredPieceSet()
+				+ "\nTheme:" + getPreferredTheme();
 	}
 
 }
