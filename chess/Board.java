@@ -54,6 +54,25 @@ public class Board {
 	}
 
 	/**
+	 * only to be called after a User is defined
+	 * @param b - refers to Runner.board
+	 */
+	public Board(Board b) {
+		this.board = b.getBoard();
+		
+		for (Piece[] pArr : board) {
+			for (Piece p : pArr) {
+				if (p != null) {
+					p.changePieceType(p.getColor() == 0);
+				}
+			}
+		}
+		
+		Runner.boardGUI.revalidate();
+		Runner.boardGUI.repaint();
+	}
+
+	/**
 	 * @return the board as a 2D piece array
 	 */
 	public Piece[][] getBoard() {
