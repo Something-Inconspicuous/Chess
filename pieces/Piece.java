@@ -101,8 +101,11 @@ public abstract class Piece implements MouseListener, ActionListener{
 		alrCalculated = true;
 
 	}
+
+	public abstract void changePieceType(boolean isW);
+	
 	//this should honestly bee in the board class but its a bit too late to rewrite code isnt it.
-public boolean validMove(int r, int c) {
+	public boolean validMove(int r, int c) {
 		
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
 		Piece[][] board = Runner.board.getBoard();
