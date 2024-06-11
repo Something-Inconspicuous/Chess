@@ -21,7 +21,8 @@ public class EvaluationBar extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-			
+		
+		System.out.println("painting");		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 	}

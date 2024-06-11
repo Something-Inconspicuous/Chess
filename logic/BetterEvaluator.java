@@ -284,7 +284,7 @@ public final class BetterEvaluator{
 			rookCount = board.countOfType("Rook", 1);
 			queenCount = board.countOfType("Queen", 1);		
 		}
-		//System.out.println(pawnCount);
+		System.out.println(pawnCount);
 		int value = 0;		
 		for(Piece piece : pieces) {
 			switch(piece.getName()) {
