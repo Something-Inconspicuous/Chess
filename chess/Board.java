@@ -245,13 +245,13 @@ public class Board {
 	}
 
 	public void applyMove(Move move) {
-		System.out.println("Move being applied");
+		//System.out.println("Move being applied");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
 		
-		System.out.println(src + " " + to);
-		System.out.println(move.getSrcPiece().getName());
-		System.out.println(move.getTargetPiece());
+		//ystem.out.println(src + " " + to);
+		//System.out.println(move.getSrcPiece().getName());
+		//System.out.println(move.getTargetPiece());
 		
 		
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getSrcPiece();
@@ -261,22 +261,25 @@ public class Board {
 		move.getSrcPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
 
 		toggleTurn();
-		System.out.println(toString());
+		//System.out.println(toString());
 	}
 
 	public void undoMove(Move move) {
-		System.out.println("Move being removed");
-		System.out.println(move.getMove());
+		//System.out.println("Move being removed");
+		//System.out.println(move.getMove());
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
 		
-				
-		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = move.getSrcPiece();
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getTargetPiece();
+		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = move.getSrcPiece();
+		
 
+		if(!(move.getTargetPiece() == null)){
+			move.getTargetPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
+		}
+		
 		move.getSrcPiece().move((src.charAt(1)-'0'), src.charAt(0)-'A');
-		move.getTargetPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
-		System.out.println(toString());
+		
 		toggleTurn();
 	}
 
