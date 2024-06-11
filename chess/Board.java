@@ -2,7 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
+import chessgui.Runner;
 import javax.swing.JButton;
 
 import pieces.*;
