@@ -1,13 +1,15 @@
 package chessgui;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
+/**
+ * Combines the GamePanel (users + board)
+ * and the SidePanel (move history + evalBar)
+ */
 public class GameGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private GamePanel gamePanel;
+	private static GamePanel gamePanel;
 	private SidePanel sidePanel;
 
 	public GameGUI() {
@@ -16,5 +18,17 @@ public class GameGUI extends JPanel {
 		
 		add(gamePanel);
 		add(sidePanel);
+	}
+	
+	public static BoardGUI getBoardGUI() {
+		return GamePanel.getBoardGUI();
+	}
+	
+	public GamePanel getGP() {
+		return gamePanel;
+	}
+	
+	public SidePanel getSP() {
+		return sidePanel;
 	}
 }

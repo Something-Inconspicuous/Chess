@@ -61,73 +61,85 @@ public class Knight extends Piece {
 		});
 	}
 
-	
-	
 	public LinkedList<Move> getAllMoves() {
 		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
 		HashMap<String, JPanel> tempMap = Runner.boardGUI.getPositionMap();
-		
+
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				if (!tempMap.containsKey((char) (65 + column + 2 * (2 * i - 1)) + "" + (8-(rank + (2 * j - 1))))) {
+				if (!tempMap.containsKey((char) (65 + column + 2 * (2 * i - 1)) + "" + (8 - (rank + (2 * j - 1))))) {
 					continue;
 				}
 
-				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null ) {
-					if(validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 0, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
+				if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)] == null) {
+					if (validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + ""
+										+ ((rank + (2 * j - 1))),
+								0, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
 					}
-				}else if( board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor() && validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
-					
-					if(board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getNameChar() == 'K') {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 4, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
-					}else {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + "" + ((rank + (2 * j - 1))), 1, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
+				} else if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getColor() != getColor()
+						&& validMove(rank + (2 * j - 1), column + 2 * (2 * i - 1))) {
+
+					if (board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)].getNameChar() == 'K') {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + ""
+										+ ((rank + (2 * j - 1))),
+								4, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
+					} else {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + 2 * (2 * i - 1)) + ""
+										+ ((rank + (2 * j - 1))),
+								1, this, board[rank + (2 * j - 1)][column + 2 * (2 * i - 1)]));
 					}
-					
+
 				}
-				
-					
-				
+
 			}
 
 		}
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				if (!tempMap.containsKey((char) (65 + column + (2 * j - 1)) + "" + (8- (rank + 2 * (2 * i - 1))))) {
+				if (!tempMap.containsKey((char) (65 + column + (2 * j - 1)) + "" + (8 - (rank + 2 * (2 * i - 1))))) {
 					continue;
 				}
 
-				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null ) {
-					
-					if(validMove(rank + 2 * (2 * i - 1), column + (2 * j - 1))) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 0, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
-					}
-				}else if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor() && validMove(rank + 2 * (2 * i - 1),column + (2 * j - 1) )) {
-					
-					if(board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getNameChar() == 'K') {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 4, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
-					}else {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" +(char) (65 + column + (2 * j - 1)) + "" + ((rank + 2 * (2 * i - 1))), 1, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
-					}
-					
+				if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)] == null) {
 
-				}
-						
+					if (validMove(rank + 2 * (2 * i - 1), column + (2 * j - 1))) {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + (2 * j - 1)) + ""
+										+ ((rank + 2 * (2 * i - 1))),
+								0, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
+					}
+				} else if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getColor() != getColor()
+						&& validMove(rank + 2 * (2 * i - 1), column + (2 * j - 1))) {
+
+					if (board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)].getNameChar() == 'K') {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + (2 * j - 1)) + ""
+										+ ((rank + 2 * (2 * i - 1))),
+								4, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
+					} else {
+						tempList.add(new Move(
+								(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + (2 * j - 1)) + ""
+										+ ((rank + 2 * (2 * i - 1))),
+								1, this, board[rank + 2 * (2 * i - 1)][column + (2 * j - 1)]));
+					}
+
 				}
 
 			}
-		
+
+		}
+
 		return tempList;
-		
-	}
-
-	@Override
-	protected void move(int r, int c) {
 
 	}
+
+	
 
 	@Override
 	protected void seeable() {
@@ -218,7 +230,7 @@ public class Knight extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		//System.out.println("Pre-update: \n" + Runner.board.toString());
+		// System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -228,14 +240,11 @@ public class Knight extends Piece {
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 
-			
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
 		Runner.eval();
-		System.out.println(Runner.engine.computeMove(999, 999).getMove());
-            Runner.board.applyMove(Runner.engine.computeMove(999, 999));
 	}
 
 	@Override
@@ -249,4 +258,11 @@ public class Knight extends Piece {
 
 	}
 
+	@Override
+	public void changePieceType(boolean isW) {
+		img = new ImageIcon(Runner.getScaledImage(new ImageIcon(getClass().getResource(
+				"/images/" + Runner.user.getPreferredPieceSet() + "-knight-" + ((isW) ? "white.png" : "black.png")))
+				.getImage(), 80, 80, 1));
+		pieceSprite.setIcon(img);
+	}
 }

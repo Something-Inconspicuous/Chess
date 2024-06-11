@@ -112,7 +112,9 @@ public class Engine {
 	 */
     //IGNORE THE PARAMETERS WE DID NOT HAVE TIME TO IMPLEMENT THEM
 	public Move computeMove(int myTime, int opTime) {
-		return searcher.getBestMove(board, myTime, opTime);
+		Move move = searcher.getBestMove(board, myTime, opTime);
+		System.out.println(move.getMove());
+		return move;
 	}
 
 	/**
