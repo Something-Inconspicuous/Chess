@@ -94,6 +94,7 @@ public class Engine {
 	 * @param m the move
 	 */
 	public void applyMove(Move m) {
+		System.out.println("APPLY MOVE 7");
 		board.applyMove(m);
 	}
 

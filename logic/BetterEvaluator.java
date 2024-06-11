@@ -278,13 +278,14 @@ public final class BetterEvaluator{
 				kingPos = kingPosBlack;
 			}
 			pawnCount = board.countOfType("Pawn", 1);
+			System.out.println(board);
 			opponentPawnCount = board.countOfType("Pawn", 0);
 			bishopCount = board.countOfType("Bishop", 1);
 			knightCount = board.countOfType("Knight", 1);
 			rookCount = board.countOfType("Rook", 1);
 			queenCount = board.countOfType("Queen", 1);		
 		}
-		System.out.println(pawnCount);
+
 		int value = 0;		
 		for(Piece piece : pieces) {
 			switch(piece.getName()) {

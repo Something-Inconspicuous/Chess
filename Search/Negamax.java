@@ -76,8 +76,9 @@ public class Negamax extends AbstractSearcher{
 		// we don't timeup until we've processed the minDepth's needed
 		//timer.start(myTime, opTime);
 		//timer.notOkToTimeup();
-
-		LinkedList<Move> moves = generateOrderedMoves();
+		
+		System.out.println("LETSSS TGOOOOOOO");
+		LinkedList<Move> moves = generateOrderedMoves(1);
 		Collections.sort(moves, moveComparator);
 
 		// Should never be called if we don't have any moves left
@@ -111,8 +112,9 @@ public class Negamax extends AbstractSearcher{
 				timeout = true;
 			}
 		}	
+		
 		board.applyMove(bestMove);
-		System.out.println(board.toString());
+		System.out.println("APPLY MOVE 1");
 		boardCount.increment(board);
 		board.undoMove(bestMove);
 		return bestMove;
@@ -170,7 +172,7 @@ public class Negamax extends AbstractSearcher{
 
 			// Compute the new best Value
 			board.applyMove(move);
-			System.out.println(board.toString());
+			System.out.println("APPLY MOVE 2");
 			value = -negamax(depth-1, -beta, -alpha);
 			board.undoMove(move);
 
@@ -256,7 +258,8 @@ public class Negamax extends AbstractSearcher{
 		}
 
 		// Get the moves we can make
-		LinkedList<Move> moves = generateOrderedMoves();
+		System.out.println("DEPTH " + depth);
+		LinkedList<Move> moves = generateOrderedMoves((depthIteration-depth)%2);
 
 		// No moves to make
 		if (moves.isEmpty()) {
@@ -286,7 +289,7 @@ public class Negamax extends AbstractSearcher{
 
 				// Compute the new best Value
 				board.applyMove(move);
-				System.out.println(board.toString());
+				System.out.println("APPLY MOVE 3");
 				value = -negamax(depth-1, -beta, -alpha);
 				board.undoMove(move);
 
@@ -361,8 +364,11 @@ public class Negamax extends AbstractSearcher{
 		if(value >= beta) {
 			return value;
 		}
-
-		LinkedList<Move> moves = generateNonQuietMoves();					
+		
+		
+		//wouldnt the move need to be removed here
+		System.out.println("MESS2 " + depth);
+		LinkedList<Move> moves = generateNonQuietMoves((depthIteration-depth)%2);					
 
 		// We are in a "quiet" position, so finish
 		if(moves.isEmpty()) {
@@ -393,7 +399,7 @@ public class Negamax extends AbstractSearcher{
 
 			// Compute the new best value
 			board.applyMove(move);
-			System.out.println(board.toString());
+			System.out.println("APPLY MOVE 4");
 			value = -quiescenceSearch(depth-1, -beta, -alpha);
 			board.undoMove(move);
 
@@ -456,8 +462,8 @@ public class Negamax extends AbstractSearcher{
 
 	// Order the moves (captures/promotions first)
 	// Doing a full sort in this method was not cost effective
-	private LinkedList<Move> generateOrderedMoves() {
-		List<Move> psmoves = board.calculateAllTheMoves();
+	private LinkedList<Move> generateOrderedMoves(int color) {
+		List<Move> psmoves = board.calculateAllTheMoves(color);
 		LinkedList<Move> moves = new LinkedList<Move>();
 		Set<Move> setmoves = new HashSet<Move>(256);
 
@@ -475,8 +481,8 @@ public class Negamax extends AbstractSearcher{
 	}
 
 	// Generates a list of moves that are only captures and promotions
-	public LinkedList<Move> generateNonQuietMoves() {
-		List<Move> psmoves = board.calculateAllTheMoves();
+	public LinkedList<Move> generateNonQuietMoves(int color) {
+		List<Move> psmoves = board.calculateAllTheMoves(color);
 		LinkedList<Move> moves = new LinkedList<Move>();
 		Set<Move> setmoves = new HashSet<Move>(256);
 
@@ -500,12 +506,17 @@ public class Negamax extends AbstractSearcher{
 			int score1, score2;
 
 			board.applyMove(move1);	
-			System.out.println(board.toString());
+			//System.out.println("APPLY MOVE 5");
+			
+			System.out.println("IT IS THE TURN OF " + board.toPlay());
 			score1 = evaluator.eval(board);
 			board.undoMove(move1);
-
+			
 			board.applyMove(move2);
-			System.out.println(board.toString());
+			System.out.println("2nd MOVE NOW (THESE ARE COMPARED)");
+			
+			
+			System.out.println("IT IS THE TURN OF " + board.toPlay());
 			score2 = evaluator.eval(board);
 			board.undoMove(move2);
 
