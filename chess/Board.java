@@ -193,25 +193,25 @@ public class Board {
 	 * returns the board as a string representation
 	 */
 	public String toString() {
-		String returnStr = "";
+		// RESEARCH THE JAVA LIBRARY GODDAMNITTTTTTTT
+		StringBuilder returnStr = new StringBuilder();
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[0].length; col++) {
 				if (board[row][col] != null) {
 					if(board[row][col].getColor() == 0){
-						returnStr += "[" + board[row][col].getNameChar() + "]";
+						returnStr.append("[" + board[row][col].getNameChar() + "]");
 					}else{
-						returnStr += "[" + Character.toLowerCase(board[row][col].getNameChar()) + "]";
+						returnStr.append("[" + Character.toLowerCase(board[row][col].getNameChar()) + "]");
 					}
-					
 				} else {
-					returnStr += "[ ]";
+					returnStr.append("[ ]");
 				}
 
-				returnStr += ((col + 1) % 8 == 0) ? "\n" : "";
+				returnStr.append(((col + 1) % 8 == 0) ? "\n" : "");
 			}
 		}
 
-		return returnStr;
+		return returnStr.toString();
 	}
 
 	public LinkedList<Move> calculateAllTheMoves() {
@@ -261,30 +261,18 @@ public class Board {
 
 		
 
-		board[move.start_row][move.start_col] = move.getSrcPiece();
-		board[move.dest_row][move.dest_col] = null;
+		board[move.getStartRow()][move.getStartCol()] = move.getSrcPiece();
+		board[move.getDestRow()][move.getDestCol()] = null;
 		move.getSrcPiece().move(move.getDestRow(),move.getDestCol());
-
 		toggleTurn();
 		//System.out.println(toString());
 	}
 
 	public void undoMove(Move move) {
-		//System.out.println("Move being removed");
-		//System.out.println(move.getMove());
-		String src = move.getMove().substring(0, 2);
-		String to = move.getMove().substring(3);
-		
-		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getTargetPiece();
-		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = move.getSrcPiece();
-		
-
-		if(!(move.getTargetPiece() == null)){
-			move.getTargetPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
-		}
-		
-		move.getSrcPiece().move((src.charAt(1)-'0'), src.charAt(0)-'A');
-		
+		System.out.println("Move being removed");
+				
+		board[move.getStartRow()][move.getStartCol()] = board[move.getDestRow()][move.getDestCol()];
+		board[move.getDestRow()][move.getDestCol()] = prevPiece;
 		toggleTurn();
 	}
 
