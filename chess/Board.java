@@ -246,19 +246,24 @@ public class Board {
 
 	public void applyMove(Move move) {
 		//System.out.println("Move being applied");
-		String src = move.getMove().substring(0, 2);
-		String to = move.getMove().substring(3);
+		// WHAT THE FUCK IS THIS SHIT????
+		// String src = move.getMove().substring(0, 2);
+		// String to = move.getMove().substring(3);
 		
 		//ystem.out.println(src + " " + to);
 		//System.out.println(move.getSrcPiece().getName());
 		//System.out.println(move.getTargetPiece());
 		
 		
-		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getSrcPiece();
+		// board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getSrcPiece();
 		
-		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
+		// board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
 
-		move.getSrcPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
+		
+
+		board[move.start_row][move.start_col] = move.getSrcPiece();
+		board[move.dest_row][move.dest_col] = null;
+		move.getSrcPiece().move(move.getDestRow(),move.getDestCol());
 
 		toggleTurn();
 		//System.out.println(toString());

@@ -73,7 +73,7 @@ public class Runner {
 		frame.pack();
 		frame.setVisible(true);
 
-		engine = new Engine(999, 999, 1);
+		engine = new Engine(999, 999, 0);
 
 		moveCircle = new ImageIcon(getScaledImage(
 				new ImageIcon(getClass().getResource("/images/move-circle.png")).getImage(), 80, 80, 0.5f));
@@ -150,8 +150,10 @@ public class Runner {
 			System.out.println("Advanced eval SIGMA: " + (-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			//boardGUI.setEval((-1.0)*(20.0*sigma((double)(BetterEvaluator.eval(board)/250.0))-10.0));
 			System.out.println("we move.");
-			System.out.println(engine.computeMove(999, 999).getMove());
+			//System.out.println(engine.computeMove(999, 999).getMove());
+			
 			board.applyMove(engine.computeMove(999, 999));
+		
 		}
 	}
 

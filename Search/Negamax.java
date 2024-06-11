@@ -500,7 +500,7 @@ public class Negamax extends AbstractSearcher{
 			int score1, score2;
 
 			board.applyMove(move1);	
-			//System.out.println(board.toString());
+			
 			score1 = evaluator.eval(board);
 			board.undoMove(move1);
 
