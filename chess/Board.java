@@ -258,6 +258,8 @@ public class Board {
 		
 		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
 
+		move.getSrcPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
+
 		toggleTurn();
 		System.out.println(toString());
 	}
@@ -271,6 +273,9 @@ public class Board {
 				
 		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = move.getSrcPiece();
 		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getTargetPiece();
+
+		move.getSrcPiece().move((src.charAt(1)-'0'), src.charAt(0)-'A');
+		move.getTargetPiece().move((to.charAt(1)-'0'), to.charAt(0)-'A');
 		System.out.println(toString());
 		toggleTurn();
 	}
