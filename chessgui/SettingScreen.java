@@ -195,7 +195,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String user = userField.getText();
-		String pass = userField.getText();
+		String pass = passField.getText();
 
 		// login
 		if (UserDatabase.login(user, pass) == 2) {
@@ -229,7 +229,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 			ptBox.setEnabled(true);
 			themeBox.setEnabled(true);
 			
-			System.out.println(Runner.user + "\nUser successfully logged in!!!");
+			System.out.println(Runner.user + "\nUser successfully registered!!");
 			
 			Runner.gameGUI.getGP().updateText();
 			revalidate();

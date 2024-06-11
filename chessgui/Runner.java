@@ -162,6 +162,7 @@ public class Runner {
 	public static void writeFile() {
 
 		try {
+			System.out.println("WROTE FILE!!!");
 			passwordMap.createNewFile();
 			usersMap.createNewFile();
 
@@ -227,6 +228,7 @@ public class Runner {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
+				System.out.println("here here here");
 				writeFile();
 			}
 		}, "Shutdown-thread"));
