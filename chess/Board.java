@@ -191,7 +191,12 @@ public class Board {
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[0].length; col++) {
 				if (board[row][col] != null) {
-					returnStr += "[" + board[row][col].getNameChar() + "]";
+					if(board[row][col].getColor() == 0){
+						returnStr += "[" + board[row][col].getNameChar() + "]";
+					}else{
+						returnStr += "[" + Character.toLowerCase(board[row][col].getNameChar()) + "]";
+					}
+					
 				} else {
 					returnStr += "[ ]";
 				}
@@ -208,7 +213,7 @@ public class Board {
 
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (board[i][j] == null)
+				if (board[i][j] == null || board[i][j].getColor() != currentTurn )
 					continue;
 
 				list.addAll(board[i][j].getAllMoves());
@@ -237,24 +242,31 @@ public class Board {
 		System.out.println("Move being applied");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
-
+		
 		System.out.println(src + " " + to);
-		prevPiece = board[(to.charAt(1) - '0')][to.charAt(0) - 'A'];
+		System.out.println(move.getSrcPiece().getName());
+		System.out.println(move.getTargetPiece());
+		
+		
+		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getSrcPiece();
+		
+		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
 
-		board[(to.charAt(1) - '0')][to.charAt(0) - 'A'] = board[(src.charAt(1) - '0')][src.charAt(0) - 'A'];
-
-		board[(src.charAt(1) - '0')][src.charAt(0) - 'A'] = null;
-
+		toggleTurn();
+		System.out.println(toString());
 	}
 
 	public void undoMove(Move move) {
 		System.out.println("Move being removed");
+		System.out.println(move.getMove());
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
-
-		board[(src.charAt(1) - '0')][src.charAt(0) - 'A'] = board[(to.charAt(1) - '0')][to.charAt(0) - 'A'];
-		board[(to.charAt(1) - '0')][to.charAt(0) - 'A'] = prevPiece;
-
+		
+				
+		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = move.getSrcPiece();
+		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = move.getTargetPiece();
+		System.out.println(toString());
+		toggleTurn();
 	}
 
 	public boolean inCheck() {
