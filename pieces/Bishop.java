@@ -98,11 +98,6 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-	protected void move(int r, int c) {
-
-	}
-
-	@Override
 	protected void seeable() {
 
 	}
