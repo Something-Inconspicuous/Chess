@@ -273,7 +273,10 @@ public abstract class Piece implements MouseListener, ActionListener {
 	 * @param r
 	 * @param c
 	 */
-	protected abstract void move(int r, int c);
+	public void move(int r, int c){
+		rank = r;
+		column = c;
+	}
 
 	/**
 	 * Allow the player to view the possible locations this piece can move to
