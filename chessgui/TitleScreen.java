@@ -33,7 +33,7 @@ public class TitleScreen extends JPanel {
 		startButton = getFormattedButton("start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Runner.setScreen(Runner.boardGUI);
+				Runner.setScreen(Runner.gameGUI);
 			}
 		});
 

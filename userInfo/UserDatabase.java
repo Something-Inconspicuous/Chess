@@ -1,6 +1,7 @@
 package userInfo;
 
 import java.util.HashMap;
+import java.awt.Color;
 import java.io.Serializable;
 
 public class UserDatabase implements Serializable {
@@ -8,13 +9,8 @@ public class UserDatabase implements Serializable {
 	private static HashMap<String, User> usernames;
 	private static HashMap<String, String> passwords;
 
-	static {
-		passwords = new HashMap<String, String>();
-		usernames = new HashMap<String, User>();
-	}
-
 	public UserDatabase() {
-		this(null, null);
+		this(new HashMap<String, User>(), new HashMap<String, String>());
 	}
 
 	public UserDatabase(HashMap<String, User> usernames, HashMap<String, String> passwords) {
@@ -39,23 +35,13 @@ public class UserDatabase implements Serializable {
 	 * @return boolean if the user was added
 	 */
 	public static boolean signUp(String username, String password) {
-		if (passwords.containsKey(username) || username.length() == 0 || password.length() == 0) {
-			return false;
-		}
-
+		return signUp(username, password, "default", "dark");
+	}
+	
+	public static boolean signUp(String username, String password, String pt, String bg) {
+		System.out.println(usernames);
 		usernames.put(username, new User(username, password));
 		passwords.put(username, password);
-
-		return true;
-	}
-
-	public static boolean signUp(String username, String password, User user) {
-		if (passwords.containsKey(username) || username.length() == 0 || password.length() == 0) {
-			return false;
-		}
-
-		passwords.put(username, password);
-		usernames.put(username, user);
 
 		return true;
 	}
@@ -72,7 +58,7 @@ public class UserDatabase implements Serializable {
 	 */
 
 	public static int login(String username, String password) {
-		if (!passwords.containsKey(username))
+		if (passwords == null || !passwords.containsKey(username))
 			return 0;
 
 		if (!passwords.get(username).equals(password))
