@@ -188,10 +188,7 @@ public class Queen extends Piece {
 
 	}
 
-	@Override
-	protected void move(int r, int c) {
-
-	}
+	
 
 	@Override
 	protected void seeable() {
