@@ -131,10 +131,6 @@ public class Rook extends Piece {
 		return tempList;
 	}
 
-	@Override
-	protected void move(int r, int c) {
-
-	}
 
 	@Override
 	protected void seeable() {
