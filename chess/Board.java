@@ -60,20 +60,26 @@ public class Board {
 	 * @param b - refers to Runner.board
 	 */
 	public Board(Board b) {
+		forceRecalibrate = new JButton();
+		
 		this.board = b.getBoard();
-
+		
 		for (Piece[] pArr : board) {
 			for (Piece p : pArr) {
 				if (p != null) {
 					p.changePieceType(p.getColor() == 0);
+					forceRecalibrate.addActionListener(board[p.getRank()][p.getColumn()]);
+					
+					if (p.getName().equals("King")) {
+						kings[p.getColor()] = (King) p;
+					}
 				}
 			}
 		}
-
+		
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
 	}
-
 	/**
 	 * @return the board as a 2D piece array
 	 */
