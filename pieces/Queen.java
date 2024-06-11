@@ -288,4 +288,10 @@ public class Queen extends Piece {
 
 	}
 
+	public void changePieceType(boolean isW) {
+		img = new ImageIcon(Runner.getScaledImage(new ImageIcon(getClass().getResource(
+				"/images/" + Runner.user.getPreferredPieceSet() + "-queen-" + ((isW) ? "white.png" : "black.png")))
+				.getImage(), 80, 80, 1));
+		pieceSprite.setIcon(img);
+	}
 }
