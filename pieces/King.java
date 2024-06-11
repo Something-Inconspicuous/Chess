@@ -60,28 +60,29 @@ public class King extends Piece {
 		});
 	}
 
-	
-	
 	public LinkedList<Move> getAllMoves() {
-		
+
 		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
-		
+
 		for (int i = Math.max(0, column - 1); i <= Math.min(7, column + 1); i++) {
 			for (int j = Math.max(rank - 1, 0); j <= Math.min(7, rank + 1); j++) {
-				if ((i == column && j == rank) || (board[j][i] != null && board[j][i].getColor() == getColor()) || !validMove(j, i)) {
+				if ((i == column && j == rank) || (board[j][i] != null && board[j][i].getColor() == getColor())
+						|| !validMove(j, i)) {
 					continue;
 				}
-				
-				if(board[j][i] == null) {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0, this, board[j][i] ));
-				}else {
-					tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1, this, board[j][i]));
+
+				if (board[j][i] == null) {
+					tempList.add(new Move((char) (65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 0,
+							this, board[j][i]));
+				} else {
+					tempList.add(new Move((char) (65 + column) + "" + (rank) + "-" + (char) (65 + i) + "" + (j), 1,
+							this, board[j][i]));
 				}
-				
+
 			}
 		}
-		
+
 		return tempList;
 	}
 
@@ -179,7 +180,7 @@ public class King extends Piece {
 
 		// update the board to match the GUI
 
-		//System.out.println("Pre-update: \n" + Runner.board.toString());
+		// System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -188,7 +189,7 @@ public class King extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			
+
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 

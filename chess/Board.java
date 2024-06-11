@@ -15,16 +15,17 @@ public class Board {
 	private static final int BLACK = 1;
 	private Piece prevPiece;
 	private int currentTurn = 0;
-	
+
 	private JButton forceRecalibrate;
 	private LinkedList<Move> moveHistory;
+
 	public Board() {
 		this("default");
 	}
 
 	public Board(String type) {
 		forceRecalibrate = new JButton();
-		
+
 		for (int i = 0; i < 2; i++) {
 			board[i * 7][0] = new Rook(type, i != 0, i * 7, 0);
 			board[i * 7][1] = new Knight(type, i != 0, i * 7, 1);
@@ -34,8 +35,8 @@ public class Board {
 			board[i * 7][5] = new Bishop(type, i != 0, i * 7, 5);
 			board[i * 7][6] = new Knight(type, i != 0, i * 7, 6);
 			board[i * 7][7] = new Rook(type, i != 0, i * 7, 7);
-			
-			kings[1-i] = (King)board[i * 7][4];
+
+			kings[1 - i] = (King) board[i * 7][4];
 		}
 
 		for (int j = 0; j < 8; j++) {
@@ -45,21 +46,22 @@ public class Board {
 		for (int j = 0; j < 8; j++) {
 			board[6][j] = new Pawn(type, true, 6, j);
 		}
-		
-		for(int i = 6; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
+
+		for (int i = 6; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				forceRecalibrate.addActionListener(board[i][j]);
-			} 
+			}
 		}
 	}
 
 	/**
 	 * only to be called after a User is defined
+	 * 
 	 * @param b - refers to Runner.board
 	 */
 	public Board(Board b) {
 		this.board = b.getBoard();
-		
+
 		for (Piece[] pArr : board) {
 			for (Piece p : pArr) {
 				if (p != null) {
@@ -67,7 +69,7 @@ public class Board {
 				}
 			}
 		}
-		
+
 		Runner.boardGUI.revalidate();
 		Runner.boardGUI.repaint();
 	}
@@ -117,7 +119,7 @@ public class Board {
 		// return 0 if white and 1 if black
 		return currentTurn;
 	}
-	
+
 	public int getCurrentTurn() {
 		return currentTurn;
 	}
@@ -168,11 +170,11 @@ public class Board {
 
 	public int countOfType(String type, int color) {
 		int count = 0;
-		
+
 		for (Piece[] x : board) {
 			for (Piece piece : x) {
 				if (piece != null && piece.getName().equals(type) && piece.getColor() == color) {
-					
+
 					count++;
 				}
 			}
@@ -200,65 +202,67 @@ public class Board {
 
 		return returnStr;
 	}
-	
-	public LinkedList<Move> calculateAllTheMoves(){
+
+	public LinkedList<Move> calculateAllTheMoves() {
 		LinkedList<Move> list = new LinkedList<Move>();
-		
-		for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
-				if(board[i][j] == null)
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (board[i][j] == null)
 					continue;
-			
+
 				list.addAll(board[i][j].getAllMoves());
 			}
 		}
-		
+
 		return list;
-		
+
 	}
 
-	public String signature(){
+	public String signature() {
 		String out = "";
-		for(int i = 0; i<8; i++){
-			for(int j = 0; j<8; j++){
-				if(board[i][j] == null){
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (board[i][j] == null) {
 					out += " ";
 				} else {
-					out+= board[i][j].getNameChar();
+					out += board[i][j].getNameChar();
 				}
 			}
 		}
 		return out;
 	}
-	
+
 	public void applyMove(Move move) {
 		System.out.println("Move being applied");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
-		
+
 		System.out.println(src + " " + to);
-		prevPiece = board[ (to.charAt(1)-'0')][to.charAt(0)-'A'];
-		
-		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = board[(src.charAt(1)-'0')][src.charAt(0)-'A'];
-		
-		board[(src.charAt(1)-'0')][src.charAt(0)-'A'] = null;
+		prevPiece = board[(to.charAt(1) - '0')][to.charAt(0) - 'A'];
+
+		board[(to.charAt(1) - '0')][to.charAt(0) - 'A'] = board[(src.charAt(1) - '0')][src.charAt(0) - 'A'];
+
+		board[(src.charAt(1) - '0')][src.charAt(0) - 'A'] = null;
 
 	}
-	
+
 	public void undoMove(Move move) {
 		System.out.println("Move being removed");
 		String src = move.getMove().substring(0, 2);
 		String to = move.getMove().substring(3);
-				
-		board[ (src.charAt(1)-'0')][src.charAt(0)-'A'] = board[(to.charAt(1)-'0')][to.charAt(0)-'A'];
-		board[(to.charAt(1)-'0')][to.charAt(0)-'A'] = prevPiece;
-		
+
+		board[(src.charAt(1) - '0')][src.charAt(0) - 'A'] = board[(to.charAt(1) - '0')][to.charAt(0) - 'A'];
+		board[(to.charAt(1) - '0')][to.charAt(0) - 'A'] = prevPiece;
+
 	}
-	
-	
+
 	public boolean inCheck() {
 		return !kings[currentTurn].validMove(kings[currentTurn].getRank(), kings[currentTurn].getColumn());
 	}
 	
+	public LinkedList<Move> getMoveHistory() {
+		return moveHistory;
+	}
 
 }

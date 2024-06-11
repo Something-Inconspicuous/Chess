@@ -58,15 +58,10 @@ public class Bishop extends Piece {
 		});
 	}
 
-	
-	
-	
-	
-	
 	public LinkedList<Move> getAllMoves() {
 		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
-		
+
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int row = rank + (2 * j - 1), col = column + (2 * i - 1); row >= 0 && row < 8 && col >= 0
@@ -74,31 +69,34 @@ public class Bishop extends Piece {
 
 					if (board[row][col] != null) {
 						if (board[row][col].getColor() != getColor() && validMove(row, col)) {
-							
-							if(board[row][col].getNameChar() == 'K') {
-								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 4, this, board[row][col]));
-							}else {
-								tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1, this, board[row][col]));
+
+							if (board[row][col].getNameChar() == 'K') {
+								tempList.add(new Move(
+										(char) (65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 4,
+										this, board[row][col]));
+							} else {
+								tempList.add(new Move(
+										(char) (65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 1,
+										this, board[row][col]));
 							}
-							
+
 						}
 
 						break;
 					}
-					
-					if(validMove(row, col)) {
-						tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row), 0, this, board[row][col]));
+
+					if (validMove(row, col)) {
+						tempList.add(new Move((char) (65 + column) + "" + (rank) + "-" + (char) (65 + col) + "" + (row),
+								0, this, board[row][col]));
 					}
-					
 
 				}
 			}
 		}
-		
-		
+
 		return tempList;
 	}
-	
+
 	@Override
 	protected void move(int r, int c) {
 
@@ -185,7 +183,7 @@ public class Bishop extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		//System.out.println("Pre-update: \n" + Runner.board.toString());
+		// System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -194,7 +192,7 @@ public class Bishop extends Piece {
 			column = p.x / 80;
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
-			
+
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
@@ -213,7 +211,7 @@ public class Bishop extends Piece {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	/**
 	 * This should ONLY be called when a user is defined

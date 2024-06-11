@@ -85,55 +85,76 @@ public class Pawn extends Piece {
 		});
 	}
 
-
-	
 	public boolean isFirstMove() {
-		return firstMove;  
+		return firstMove;
 	}
+
 	public LinkedList<Move> getAllMoves() {
-	
+
 		LinkedList<Move> tempList = new LinkedList<>();
 		Piece[][] board = Runner.board.getBoard();
-		
-	
+
 		// will cause out of bounds errors
 
 		// soon wont be needed, cuz pawns can never reach those ranks
 		if (rank != 0 && rank != 7 && board[rank + ((isWhite) ? -1 : 1)][column] == null) {
-			
-			if(validMove(rank + ((isWhite) ? -1 : 1), column)) {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -1 : 1))), 0, this, board[rank + ((isWhite) ? -1 : 1)][column]));
+
+			if (validMove(rank + ((isWhite) ? -1 : 1), column)) {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column) + ""
+								+ ((rank + ((isWhite) ? -1 : 1))),
+						0, this, board[rank + ((isWhite) ? -1 : 1)][column]));
 			}
-			
-			
-			if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null && validMove(rank + ((isWhite) ? -2 : 2), column)) {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column) + "" + ((rank + ((isWhite) ? -2 : 2))), 0, this, board[rank + ((isWhite) ? -2 : 2)][column]));
+
+			if (firstMove && board[rank + ((isWhite) ? -2 : 2)][column] == null
+					&& validMove(rank + ((isWhite) ? -2 : 2), column)) {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column) + ""
+								+ ((rank + ((isWhite) ? -2 : 2))),
+						0, this, board[rank + ((isWhite) ? -2 : 2)][column]));
 			}
 		}
 
 		if (column != 0 && board[rank + ((isWhite) ? -1 : 1)][column - 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column-1)) {
-			
-			if(column > 1 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5 && board[rank + ((isWhite) ? -2 : 2)][column - 2] != null && board[rank + ((isWhite) ? -2 : 2)][column - 2].getNameChar() == 'K' && board[rank + ((isWhite) ? -2 : 2)][column - 2].getColor() != getColor()) {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 4, this, board[rank + ((isWhite) ? -1 : 1)][column - 1]));
-			}else {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column - 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1, this, board[rank + ((isWhite) ? -1 : 1)][column - 1]));
+				&& board[rank + ((isWhite) ? -1 : 1)][column - 1].getColor() != getColor()
+				&& validMove(rank + ((isWhite) ? -1 : 1), column - 1)) {
+
+			if (column > 1 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5
+					&& board[rank + ((isWhite) ? -2 : 2)][column - 2] != null
+					&& board[rank + ((isWhite) ? -2 : 2)][column - 2].getNameChar() == 'K'
+					&& board[rank + ((isWhite) ? -2 : 2)][column - 2].getColor() != getColor()) {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column - 1) + ""
+								+ ((rank + ((isWhite) ? -1 : 1))),
+						4, this, board[rank + ((isWhite) ? -1 : 1)][column - 1]));
+			} else {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column - 1) + ""
+								+ ((rank + ((isWhite) ? -1 : 1))),
+						1, this, board[rank + ((isWhite) ? -1 : 1)][column - 1]));
 			}
-			
-			
+
 		}
 
 		if (column != 7 && board[rank + ((isWhite) ? -1 : 1)][column + 1] != null
-				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor() && validMove(rank + ((isWhite) ? -1 : 1), column + 1)) {
-			
-			if(column < 6 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5 && board[rank + ((isWhite) ? -2 : 2)][column] != null && board[rank + ((isWhite) ? -2 : 2)][column].getNameChar() == 'K' && board[rank + ((isWhite) ? -2 : 2)][column].getColor() != getColor()) {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 4, this, board[rank + ((isWhite) ? -1 : 1)][column + 1]));
-			}else {
-				tempList.add(new Move((char)(65 + column) + "" + (rank) + "-" + (char) (65 + column + 1) + "" + ((rank + ((isWhite) ? -1 : 1))), 1, this, board[rank + ((isWhite) ? -1 : 1)][column + 1]));
+				&& board[rank + ((isWhite) ? -1 : 1)][column + 1].getColor() != getColor()
+				&& validMove(rank + ((isWhite) ? -1 : 1), column + 1)) {
+
+			if (column < 6 && Math.abs(3.5 - (rank + ((isWhite) ? -2 : 2))) <= 3.5
+					&& board[rank + ((isWhite) ? -2 : 2)][column] != null
+					&& board[rank + ((isWhite) ? -2 : 2)][column].getNameChar() == 'K'
+					&& board[rank + ((isWhite) ? -2 : 2)][column].getColor() != getColor()) {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + 1) + ""
+								+ ((rank + ((isWhite) ? -1 : 1))),
+						4, this, board[rank + ((isWhite) ? -1 : 1)][column + 1]));
+			} else {
+				tempList.add(new Move(
+						(char) (65 + column) + "" + (rank) + "-" + (char) (65 + column + 1) + ""
+								+ ((rank + ((isWhite) ? -1 : 1))),
+						1, this, board[rank + ((isWhite) ? -1 : 1)][column + 1]));
 			}
 		}
-
-		
 
 		return tempList;
 
@@ -200,7 +221,7 @@ public class Pawn extends Piece {
 
 		boolean valid = false;
 		boolean isTurn = Runner.board.getCurrentTurn() == ((isWhite) ? 0 : 1);
-		
+
 		if (!(Runner.boardGUI.getBoardPanel().getComponentAt(p) instanceof JPanel)) {
 			parentSquare.add(pieceSprite);
 			valid = false;
@@ -225,7 +246,7 @@ public class Pawn extends Piece {
 		Runner.boardGUI.repaint();
 
 		// update the board to match the GUI
-		//System.out.println("Pre-update: \n" + Runner.board.toString());
+		// System.out.println("Pre-update: \n" + Runner.board.toString());
 		if (valid && isTurn && !(p.x / 80 - 1 == prevPoint.x / 80 - 1 && p.y / 80 == prevPoint.y / 80)) {
 			Runner.board.getBoard()[p.y / 80 - 1][p.x / 80] = Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x
 					/ 80];
@@ -236,15 +257,14 @@ public class Pawn extends Piece {
 
 			Runner.board.getBoard()[prevPoint.y / 80 - 1][prevPoint.x / 80] = null;
 
-			
 		}
 		System.out.println("Post-update: \n" + Runner.board.toString());
 
 		parentSquare.setBorder(originalBorder);
-		
-	//	Runner.board.applyMove(new Move("A7-A6", 0, null, null));
-		
-		//System.out.println("Post-update: \n" + Runner.board.toString());
+
+		// Runner.board.applyMove(new Move("A7-A6", 0, null, null));
+
+		// System.out.println("Post-update: \n" + Runner.board.toString());
 		Runner.eval();
 	}
 

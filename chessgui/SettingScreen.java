@@ -6,6 +6,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import chess.Board;
+
 public class SettingScreen extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final String[] pieceTypes;
@@ -29,6 +31,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 	private JComboBox<String> ptBox; // piece type box
 	private JComboBox<String> themeBox; // theme box
 	private JLabel prefHeaderLabel;
+	private JButton saveButton;
 	private JButton backButton;
 	
 
@@ -67,6 +70,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 		passField.setMaximumSize(new Dimension(1600, 40));
 
 		registerButton = new JButton("Register");
+		registerButton.addActionListener(this);
 		
 		
 		// profilePanel declaration and components
@@ -102,17 +106,50 @@ public class SettingScreen extends JPanel implements ActionListener {
 		prefHeaderLabel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 
 		ptBox = new JComboBox<String>(pieceTypes);
+		ptBox.setEnabled(false);
 		ptBox.setMaximumSize(new Dimension(400, 40));
 		ptBox.setFocusable(false);
 		ptBox.setFont(new Font("ARIAL", Font.PLAIN, 25));
 		ptBox.setSelectedIndex(0); // should use default
+		ptBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveButton.setEnabled(true);
+			}
+		});
 
 		themeBox = new JComboBox<String>(themes);
+		themeBox.setEnabled(false);
 		themeBox.setMaximumSize(new Dimension(400, 40));
 		themeBox.setFocusable(false);
 		themeBox.setFont(new Font("ARIAL", Font.PLAIN, 25));
+		themeBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveButton.setEnabled(true);
+			}
+		});
 
-		backButton = new JButton("ok");
+		saveButton = new JButton("Save changes");
+		saveButton.setEnabled(false);
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (Runner.user != null) {
+					Color c = ((String)themeBox.getSelectedItem()).equals("light") ? Color.WHITE : Color.DARK_GRAY;
+					
+					Runner.user.setPiecePref((String) ptBox.getSelectedItem());
+					Runner.user.setTheme(c);
+					
+					Runner.board = new Board(Runner.board);
+					Runner.frame.setBackground(c);
+					Runner.boardGUI.revalidate();
+					
+					saveButton.setEnabled(false);
+					
+					System.out.println("\nnew user: " + Runner.user + "\n");
+				}
+			}
+		});
+		
+		backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				Runner.setScreen(Runner.titleScreen);
@@ -144,6 +181,7 @@ public class SettingScreen extends JPanel implements ActionListener {
 		prefsPanel.add(Box.createVerticalStrut(DEFAULT_GAP * 2));
 		prefsPanel.add(themeBox);
 		prefsPanel.add(Box.createVerticalStrut(35));
+		prefsPanel.add(saveButton);
 		prefsPanel.add(backButton);
 
 		if (currentUser == null) {
@@ -156,6 +194,47 @@ public class SettingScreen extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String user = userField.getText();
+		String pass = userField.getText();
 
+		// login
+		if (UserDatabase.login(user, pass) == 2) {
+			System.out.println("entered login statement");
+			Runner.user = Runner.userData.getUsers().get(user);
+		}
+		
+		// registry
+		// users should be 4-16 characters in length (it has already checked for unique users)
+		else if (4 < user.length() && user.length() < 17) {
+			
+			// passwords should be at least 5 characters in length
+			if (5 < pass.length()) {
+				Runner.user = new User(user, pass);
+				UserDatabase.signUp(user, pass);
+			}
+			else
+				System.out.println("password invalid");
+		}
+		else
+			System.out.println("username invalid");
+		
+		if (Runner.user != null) {
+			// remove registerPanel (must remove prefsPanel as well)
+			remove(prefsPanel);
+			remove(registerPanel);
+			
+			// add profilePanel
+			add(profilePanel);
+			add(prefsPanel);
+			ptBox.setEnabled(true);
+			themeBox.setEnabled(true);
+			
+			System.out.println(Runner.user + "\nUser successfully logged in!!!");
+			
+			Runner.gameGUI.getGP().updateText();
+			revalidate();
+		}
+		
+		System.out.println("end of actionPerformed");
 	}
 }
